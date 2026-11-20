@@ -5458,13 +5458,22 @@ window.IGNAGHT_SINGLE_FILE = true;
       .catch((err) => console.warn('[pwa] service worker no registrado', err));
   }
 
-  registerServiceWorker();
-  boot().catch((err) => {
-    console.error('[boot]', err);
-    setScreen('auth');
-    window.__IGNAGHT_BOOTED__ = true;
-    toast('No se pudo iniciar la app. Revisa la consola.', 'bad');
-  });
+  // El script está en <head>: hay que esperar a que exista el DOM (#fx, #boot, #auth...)
+  // antes de arrancar, si no `new Fx(null)` falla y la pantalla de carga se queda para siempre.
+  function startApp() {
+    registerServiceWorker();
+    boot().catch((err) => {
+      console.error('[boot]', err);
+      try { setScreen('auth'); renderAuthTab('login'); } catch (e) { /* nada */ }
+      window.__IGNAGHT_BOOTED__ = true;
+      try { toast('No se pudo iniciar la app. Revisa la consola.', 'bad'); } catch (e) { /* nada */ }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startApp, { once: true });
+  } else {
+    startApp();
+  }
 
 })();
 
