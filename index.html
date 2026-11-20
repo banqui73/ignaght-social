@@ -1779,6 +1779,13 @@ window.IGNAGHT_CONFIG = {
   <script>
 window.IGNAGHT_SINGLE_FILE = true;
 (function () {
+  // Limpieza de service workers/cach?s de versiones anteriores (multifile).
+  try {
+    if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); }).catch(function () {});
+    if (window.caches && caches.keys) caches.keys().then(function (keys) { keys.forEach(function (k) { caches.delete(k); }); }).catch(function () {});
+  } catch (e) {}
+})();
+(function () {
   'use strict';
 
   /** Cliente HTTP del servidor IGNAGHT. */
@@ -3876,6 +3883,7 @@ window.IGNAGHT_SINGLE_FILE = true;
       }
     }
     setBootText('Listo');
+    window.__IGNAGHT_BOOTED__ = true;
   }
 
   const isApiLocked = () => Boolean(window.IGNAGHT_CONFIG?.LOCK_API);
@@ -5454,6 +5462,7 @@ window.IGNAGHT_SINGLE_FILE = true;
   boot().catch((err) => {
     console.error('[boot]', err);
     setScreen('auth');
+    window.__IGNAGHT_BOOTED__ = true;
     toast('No se pudo iniciar la app. Revisa la consola.', 'bad');
   });
 
@@ -5818,5 +5827,18 @@ window.IGNAGHT_SINGLE_FILE = true;
   <noscript>
     <div class="noscript">IGNAGHT necesita JavaScript para cifrar en tu navegador. Actívalo y recarga.</div>
   </noscript>
+
+  <script>
+    window.setTimeout(function () {
+      var boot = document.getElementById('boot');
+      if (!boot || boot.classList.contains('hidden') || window.__IGNAGHT_BOOTED__) return;
+      var text = document.getElementById('boot-text');
+      if (text) {
+        text.innerHTML = 'No se pudo iniciar. Si abriste este archivo desde el disco, usa <strong>index.html</strong> (versión de un solo archivo) o súbelo a un sitio HTTPS.';
+      }
+      var hint = document.querySelector('.boot-hint');
+      if (hint) hint.textContent = 'Comprueba la conexión y el estado del servicio.';
+    }, 9000);
+  </script>
 </body>
 </html>
