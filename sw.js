@@ -1,6 +1,6 @@
 /* Service worker IGNAGHT: shell offline, nunca toca la API ni otros orígenes. */
-const VERSION = 'ignaght-v3';
-const SHELL = ['./', './index.html', './manifest.webmanifest'];
+const VERSION = 'ignaght-v4';
+const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => Promise.all(SHELL.map((u) => c.add(u).catch(() => {})))).then(() => self.skipWaiting()));
