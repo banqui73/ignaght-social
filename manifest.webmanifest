@@ -1,39 +1,30 @@
 {
-  "name": "IGNAGHT \u00b7 mensajer\u00eda cifrada",
+  "name": "IGNAGHT · mensajería cifrada",
   "short_name": "IGNAGHT",
-  "description": "Mensajer\u00eda cifrada de extremo a extremo con planes por c\u00f3digos y audios cifrados.",
-  "id": "./",
-  "start_url": "./",
-  "scope": "./",
+  "description": "Mensajería cifrada de extremo a extremo.",
+  "id": "/ignaght-social/",
+  "start_url": "/ignaght-social/",
+  "scope": "/ignaght-social/",
   "display": "standalone",
-  "display_override": [
-    "window-controls-overlay",
-    "standalone",
-    "minimal-ui"
-  ],
-  "orientation": "any",
   "background_color": "#07070f",
   "theme_color": "#07070f",
   "lang": "es",
-  "categories": [
-    "social",
-    "communication"
-  ],
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/ignaght-social/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "/ignaght-social/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icon-maskable-512.png",
+      "src": "/ignaght-social/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
