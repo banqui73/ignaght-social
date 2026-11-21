@@ -2112,6 +2112,7 @@ html[data-theme="mono"] { --a1: #d4d4e2; --a2: #8b90ad; }
 .bad-text{color:var(--bad)}
 
 
+.home-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:99px;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#081018;background:linear-gradient(135deg,var(--ok),var(--a2));vertical-align:middle}
 /* --- Ajustes del build de un solo archivo --- */
 svg.brand-mark,
 svg.boot-shield,
@@ -3001,6 +3002,23 @@ window.IGNAGHT_SINGLE_FILE = true;
 
   const PLAN_NAMES = { free: 'Gratis', plus: 'Plus', pro: 'Pro', elite: 'Elite' };
 
+  // Web de casa = acceso desde localhost, IP de red local o dominios que añadas aquí.
+  const HOME_EXTRA_HOSTS = []; // p. ej. ['casa.midominio.com']
+  function isHomeWeb() {
+    const h = String(location.hostname || '').toLowerCase();
+    if (!h) return false;
+    return (
+      h === 'localhost' ||
+      h === '127.0.0.1' ||
+      h === '[::1]' ||
+      h.endsWith('.local') ||
+      /^10\./.test(h) ||
+      /^192\.168\./.test(h) ||
+      /^172\.(1[6-9]|2\d|3[01])\./.test(h) ||
+      HOME_EXTRA_HOSTS.includes(h)
+    );
+  }
+
   const state = {
     api: new Api(),
     user: null,
@@ -3567,7 +3585,7 @@ window.IGNAGHT_SINGLE_FILE = true;
       avatar.className = `rail-avatar ${state.user.plan?.tier !== 'free' ? `tier-${state.user.plan.tier}` : ''}`;
     }
     const sub = $('#list-sub');
-    if (sub) sub.textContent = `@${state.user.username} · ${PLAN_NAMES[state.user.plan?.tier] || 'Gratis'}`;
+    if (sub) sub.textContent = `@${state.user.username} · ${PLAN_NAMES[state.user.plan?.tier] || 'Gratis'}${isHomeWeb() ? ' · casa' : ''}`;
     const nav = $('#e2ee-label');
     if (nav) nav.textContent = 'E2EE activo';
   }
@@ -4374,7 +4392,7 @@ window.IGNAGHT_SINGLE_FILE = true;
     </section>
 
     <section class="codes-panel">
-      <header class="codes-head">
+      ${isHomeWeb() ? `<header class="codes-head">
         <div>
           <h3>${svgIcon('spark', 'ico-sm')} Códigos IGNAGHT</h3>
           <p class="muted">El servidor fabrica una tanda nueva cada ${codes.intervalHours} h: mínimo ${codes.base} códigos, más ${codes.perNewUser} por cada usuario nuevo.</p>
@@ -4390,7 +4408,7 @@ window.IGNAGHT_SINGLE_FILE = true;
         <div class="stat-card"><span class="stat-kicker">Disponibles ahora</span><strong>${codes.totals.available}</strong><small>sin canjear y sin caducar</small></div>
         <div class="stat-card"><span class="stat-kicker">Usuarios nuevos</span><strong>+${codes.newUsersSinceBatch}</strong><small>próxima tanda: ${codes.upcomingCount} códigos</small></div>
         <div class="stat-card"><span class="stat-kicker">Canjeados</span><strong>${codes.totals.redeemed}</strong><small>de ${codes.totals.generated} generados</small></div>
-      </div>
+      </div>` : ''}
 
       <form id="redeem-form" class="redeem" autocomplete="off">
         <label class="field">
@@ -4402,7 +4420,7 @@ window.IGNAGHT_SINGLE_FILE = true;
         </label>
         <button class="btn primary" type="submit">${svgIcon('spark', 'ico-xs')} Canjear</button>
       </form>
-      <p class="codes-note">${svgIcon('info', 'ico-xs')} Los códigos caducan a los ${codes.ttlHours} h y cada uno solo puede usarse una vez. Consigue uno de alguien que ya esté dentro, del canal oficial o del panel de administración.</p>
+      <p class="codes-note">${svgIcon('info', 'ico-xs')} Los códigos caducan a los ${codes.ttlHours} h y cada uno solo puede usarse una vez. Consigue uno de alguien que ya esté dentro o del canal oficial.</p>
     </section>
 
     <section class="tiers-section">
@@ -4490,8 +4508,8 @@ window.IGNAGHT_SINGLE_FILE = true;
       ${(user.limits?.maxBots ?? 0) <= 0 ? '<p class="set-hint small">Los bots se desbloquean con Plus o superior.</p>' : ''}
     </section>
 
-    <section class="set-card">
-      <h3>${svgIcon('gear', 'ico-sm')} Administración</h3>
+    ${isHomeWeb() ? `<section class="set-card">
+      <h3>${svgIcon('gear', 'ico-sm')} Administración <span class="home-chip">Solo casa</span></h3>
       <p class="set-hint">Solo funciona desde la red de casa; desde fuera el servidor lo rechaza. El token se guarda solo en este dispositivo.</p>
       <div class="kv"><span>Estado de la app</span><strong>${state.system?.maintenance?.on ? 'en mantenimiento' : 'normal'}</strong></div>
       <label class="field">
@@ -4513,7 +4531,7 @@ window.IGNAGHT_SINGLE_FILE = true;
         <button class="btn ghost small" data-action="admin-clear-notice">${svgIcon('close', 'ico-xs')} Quitar anuncio</button>
       </div>
       <p class="set-hint small" id="admin-feedback"></p>
-    </section>
+    </section>` : ''}
 
     <section class="set-card">
       <h3>${svgIcon('monitor', 'ico-sm')} Interfaz</h3>
