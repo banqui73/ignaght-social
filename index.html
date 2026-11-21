@@ -1832,53 +1832,217 @@ html[data-anim="off"] .aurora .blob { animation: none; opacity: 0.3; }
   .admin-codes { grid-template-columns: 1fr; }
 }
 
+/* ==========================================================================
+   Grupos, mensajes fijados y edición (añadido sobre el sistema base)
+   ========================================================================== */
+
+html[data-theme="sunset"] { --a1: #ff8a3d; --a2: #ff3d77; }
+html[data-theme="ocean"] { --a1: #2dd4bf; --a2: #3b82f6; }
+html[data-theme="candy"] { --a1: #f472b6; --a2: #a78bfa; }
+html[data-theme="mono"] { --a1: #d4d4e2; --a2: #8b90ad; }
+
+.avatar-group { border-radius: 13px; background: linear-gradient(135deg, rgba(124, 92, 255, 0.35), rgba(57, 230, 255, 0.22)); }
+.group-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 7px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--a2);
+  background: rgba(57, 230, 255, 0.1);
+  border: 1px solid rgba(57, 230, 255, 0.28);
+  vertical-align: middle;
+}
+.group-dot {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  color: var(--a2);
+}
+
+.chat-tabs { display: flex; gap: 6px; padding: 4px; border-radius: 12px; background: rgba(0, 0, 0, 0.24); border: 1px solid var(--line); margin-bottom: 16px; }
+.chat-tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.chat-tab.active { background: var(--grad-soft); color: var(--text); }
+.chat-tab.active .ico-xs { color: var(--a2); }
+
+.member-hint { margin: 2px 0 8px; font-size: 11px; color: var(--muted-2); }
+.member-picker { display: flex; flex-wrap: wrap; gap: 6px; min-height: 4px; margin-bottom: 12px; }
+.member-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px 3px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--glass);
+  font-size: 12px;
+}
+.member-chip button { display: grid; place-items: center; border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: 2px; }
+.member-chip button:hover { color: var(--bad); }
+.field-add { flex: 0 0 auto; margin-left: 4px; }
+
+.pinned-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(57, 230, 255, 0.05);
+  overflow: hidden;
+}
+.pinned-head { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--a2); flex: 0 0 auto; }
+.pinned-list { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.pinned-list::-webkit-scrollbar { display: none; }
+.pinned-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  max-width: 210px;
+  padding: 4px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pinned-item:hover { border-color: var(--line-strong); }
+.pinned-item strong { color: var(--a2); font-size: 10px; }
+.pinned-more { align-self: center; font-size: 10.5px; color: var(--muted-2); }
+
+.member-list { display: grid; gap: 6px; margin-bottom: 10px; }
+.member-row { display: flex; align-items: center; gap: 9px; padding: 6px 8px; border-radius: 10px; background: rgba(0, 0, 0, 0.18); border: 1px solid var(--line); }
+.member-avatar { display: inline-flex; flex: 0 0 auto; }
+.member-main { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.member-main strong { font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; }
+.member-main small { font-size: 10.5px; color: var(--muted-2); }
+.member-owner { margin-left: auto; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--warn); }
+.member-row .icon-btn { margin-left: auto; }
+.member-row .icon-btn + .member-owner { margin-left: 0; }
+
+.icon-btn.tiny { width: 26px; height: 26px; border-radius: 8px; }
+
+.pinned-info-list { display: grid; gap: 6px; }
+.pinned-info { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: 10px; border: 1px solid var(--line); background: rgba(0, 0, 0, 0.18); }
+.pinned-info-main { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.pinned-info-main strong { font-size: 10.5px; color: var(--a2); }
+.pinned-text { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.pinned-info .icon-btn { margin-left: auto; }
+
+.msg-sender { display: block; margin-bottom: 3px; font-size: 10.5px; font-weight: 700; color: var(--a2); }
+.msg.deleted .bubble { opacity: 0.72; border-style: dashed; }
+.msg-deleted { display: flex; align-items: center; gap: 6px; font-style: italic; color: var(--muted-2); }
+.msg-edited { color: var(--muted-2); font-style: italic; }
+.msg-more {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin-left: 2px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+}
+.msg:hover .msg-more, .msg:focus-within .msg-more, .msg.out .msg-more { opacity: 0.75; }
+.msg-more:hover { opacity: 1; background: var(--glass-2); }
+.msg.flash .bubble { animation: msg-flash 1.1s var(--ease); }
+@keyframes msg-flash {
+  0%, 100% { box-shadow: none; }
+  30% { box-shadow: 0 0 0 2px var(--a2); }
+}
+
+.msg-menu-preview {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.24);
+  font-size: 13px;
+  color: var(--muted);
+  max-height: 140px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.msg-menu-actions { display: flex; flex-direction: column; gap: 8px; }
+.msg-menu-actions .btn { justify-content: flex-start; }
+
+.edit-textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.24);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.edit-textarea:focus { outline: none; border-color: rgba(124, 92, 255, 0.6); box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.16); }
+
+.info-actions { flex-direction: row; flex-wrap: wrap; }
+.info-actions .btn { flex: 1 1 auto; justify-content: center; }
+
+/* ---- Bots publicos ---- */
+.bot-badge{display:inline-flex;align-items:center;margin-left:8px;padding:2px 7px;border-radius:99px;font-size:9.5px;font-weight:800;letter-spacing:.08em;color:#081018;background:linear-gradient(135deg,var(--a2),var(--a1));vertical-align:middle}
+.bot-list{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.bot-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--glass)}
+.bot-avatar{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:rgba(57,230,255,.12);color:var(--a2);flex:0 0 auto}
+.bot-main{display:flex;flex-direction:column;min-width:0;flex:1}
+.bot-main strong{font-size:13px}
+.bot-main small{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bot-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.msg-bot{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;color:var(--a2);text-transform:uppercase;letter-spacing:.05em}
+.bot-code{margin:8px 0 12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(5,5,12,.7);color:var(--text);font-family:ui-monospace,Consolas,monospace;font-size:11.5px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+.token-box{margin:10px 0;padding:12px;border:1px dashed rgba(57,230,255,.45);border-radius:12px;background:rgba(57,230,255,.06)}
+.token-box code{display:block;font-family:ui-monospace,Consolas,monospace;font-size:12px;word-break:break-all;color:var(--a2)}
+.api-docs{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.api-docs code,.modal-note code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--a2)}
+.set-card .btn[disabled]{opacity:.45;cursor:not-allowed}
+
 
 /* --- Ajustes del build de un solo archivo --- */
 svg.brand-mark,
 svg.boot-shield,
 svg.rail-logo { background: transparent !important; padding: 0; display: block; }
-
-/* ---- v2: planes, móvil y menos parpadeo ---- */
-.conv{animation:none;border-radius:18px}.conv.fresh{animation:fadeUp .35s var(--ease) both}
-.msg{animation:none}
-.msg.out .bubble{box-shadow:0 12px 30px rgba(94,92,255,.3)}
-.plan-hero{display:flex;align-items:center;gap:20px;padding:22px;border-radius:var(--r-xl);border:1px solid rgba(124,92,255,.32);background:radial-gradient(520px 220px at 100% 0,rgba(57,230,255,.16),transparent 60%),linear-gradient(140deg,rgba(124,92,255,.24),rgba(14,14,28,.92));box-shadow:var(--shadow-md)}
-.plan-hero h2{margin:2px 0;font-size:28px;letter-spacing:-.02em}
-.plan-hero p{margin:0;font-size:12.5px}
-.ring{--p:0;position:relative;flex:0 0 auto;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--a2) calc(var(--p)*1%),rgba(255,255,255,.1) 0)}
-.ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#0d0d1c}
-.ring span{position:relative;font-weight:800;font-size:16px}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.chips span{padding:5px 10px;border-radius:99px;background:var(--glass);border:1px solid var(--line);font-size:11px;color:var(--muted)}
-.redeem-card{padding:20px;border-radius:var(--r-lg);border:1px solid var(--line);background:rgba(14,14,26,.62)}
-.redeem-card h3{display:flex;align-items:center;gap:8px;margin:0 0 14px;font-size:15px}
-.redeem-card h3 .ico-sm{color:var(--warn)}
-.redeem{align-items:center}
-.redeem .field-wrap{height:52px}
-#redeem-code{font-family:ui-monospace,Consolas,monospace;letter-spacing:.08em;font-size:16px;text-transform:uppercase}
-.fab{position:absolute;right:18px;bottom:calc(92px + env(safe-area-inset-bottom));z-index:12;width:56px;height:56px;border-radius:20px;display:none;place-items:center;background:var(--grad);color:#080812;box-shadow:0 16px 40px rgba(124,92,255,.5)}
-.app.is-mobile .fab{display:grid}
-.scroll-fab{position:absolute;right:16px;bottom:calc(86px + env(safe-area-inset-bottom));z-index:7;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:rgba(22,22,40,.92);border:1px solid var(--line-strong);box-shadow:var(--shadow-md);animation:popIn .2s var(--ease)}
-.offline-bar{position:fixed;top:0;left:0;right:0;z-index:95;padding:calc(6px + env(safe-area-inset-top)) 12px 6px;text-align:center;font-size:12px;font-weight:600;background:var(--bad);color:#1a0408;transform:translateY(-110%);transition:transform .3s var(--ease)}
-body.is-offline .offline-bar{transform:none}
-.app.is-mobile{--nav-h:calc(84px + env(safe-area-inset-bottom))}
-.app.is-mobile .list-pane,.app.is-mobile .chat-pane{inset:0}
-.app.is-mobile .conv-list{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
-.app.is-mobile .list-foot,.app.is-mobile .list-head .icon-btn.glow{display:none}
-.app.is-mobile .mobile-nav{left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom));height:64px;padding:6px;gap:4px;border-radius:24px;border:1px solid var(--line-strong);background:rgba(14,14,28,.8);box-shadow:0 18px 50px rgba(0,0,0,.55)}
-.app.is-mobile .mobile-nav button{border-radius:18px}
-.app.is-mobile .mobile-nav button.active{background:var(--glass-2)}
-.app.is-mobile .mobile-nav button.active::before{display:none}
-@media (max-width:900px){
-  .plan-hero{flex-direction:column;text-align:center;padding:20px}
-  .chips{justify-content:center}
-  .tiers{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -14px;padding:4px 14px 12px}
-  .tier-card{flex:0 0 80%;scroll-snap-align:center}
-  .view-head{padding-top:calc(14px + env(safe-area-inset-top))}
-  .view-body{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
-  .modal-overlay{place-items:end center;padding:0}
-  .modal{width:100%;max-height:92dvh;border-radius:26px 26px 0 0;transform:translateY(40px);padding-bottom:env(safe-area-inset-bottom)}
-}
 </style>
   <script>
 /**
@@ -2048,6 +2212,40 @@ window.IGNAGHT_SINGLE_FILE = true;
       return this.request('POST', '/api/conversations', { json: { peerId } });
     }
 
+    createGroup({ nameCipher, memberIds, keys }) {
+      return this.request('POST', '/api/conversations', {
+        json: { type: 'group', nameCipher, memberIds, keys },
+        timeout: 30000,
+      });
+    }
+
+    renameConversation(id, nameCipher) {
+      return this.request('PATCH', `/api/conversations/${encodeURIComponent(id)}`, {
+        json: { nameCipher },
+      });
+    }
+
+    addMember(id, userId, key) {
+      return this.request('POST', `/api/conversations/${encodeURIComponent(id)}/members`, {
+        json: { userId, key },
+      });
+    }
+
+    removeMember(id, userId) {
+      return this.request(
+        'DELETE',
+        `/api/conversations/${encodeURIComponent(id)}/members/${encodeURIComponent(userId)}`,
+      );
+    }
+
+    leaveConversation(id) {
+      return this.request('POST', `/api/conversations/${encodeURIComponent(id)}/leave`, { json: {} });
+    }
+
+    deleteConversation(id) {
+      return this.request('DELETE', `/api/conversations/${encodeURIComponent(id)}`);
+    }
+
     conversation(id) {
       return this.request('GET', `/api/conversations/${encodeURIComponent(id)}`);
     }
@@ -2062,6 +2260,34 @@ window.IGNAGHT_SINGLE_FILE = true;
       return this.request('POST', `/api/conversations/${encodeURIComponent(id)}/messages`, {
         json: { cipher, kind },
       });
+    }
+
+    editMessage(id, messageId, cipher) {
+      return this.request(
+        'PATCH',
+        `/api/conversations/${encodeURIComponent(id)}/messages/${encodeURIComponent(messageId)}`,
+        { json: { cipher } },
+      );
+    }
+
+    deleteMessage(id, messageId) {
+      return this.request(
+        'DELETE',
+        `/api/conversations/${encodeURIComponent(id)}/messages/${encodeURIComponent(messageId)}`,
+      );
+    }
+
+    pinMessage(id, messageId) {
+      return this.request('POST', `/api/conversations/${encodeURIComponent(id)}/pins`, {
+        json: { messageId },
+      });
+    }
+
+    unpinMessage(id, messageId) {
+      return this.request(
+        'DELETE',
+        `/api/conversations/${encodeURIComponent(id)}/pins/${encodeURIComponent(messageId)}`,
+      );
     }
 
     markRead(id) {
@@ -2131,6 +2357,19 @@ window.IGNAGHT_SINGLE_FILE = true;
 
     redeem(code) {
       return this.request('POST', '/api/plans/redeem', { json: { code } });
+    }
+
+    // --- Bots ---------------------------------------------------------
+    bots() {
+      return this.request('GET', '/api/bots');
+    }
+
+    createBot(name) {
+      return this.request('POST', '/api/bots', { json: { name } });
+    }
+
+    deleteBot(id) {
+      return this.request('DELETE', `/api/bots/${encodeURIComponent(id)}`);
     }
   }
 
@@ -2276,6 +2515,41 @@ window.IGNAGHT_SINGLE_FILE = true;
     );
   }
 
+  /**
+   * Clave de grupo: 32 bytes aleatorios que solo viajan envueltos para cada
+   * miembro con el secreto ECDH de su pareja de claves. El servidor guarda los
+   * sobres, nunca la clave en claro.
+   */
+  async function generateGroupKey() {
+    const raw = globalThis.crypto.getRandomValues(new Uint8Array(32));
+    const key = await subtle.importKey('raw', raw, { name: 'AES-GCM' }, true, [
+      'encrypt',
+      'decrypt',
+    ]);
+    return { raw, key };
+  }
+
+  async function wrapGroupKey(raw, privateKey, peerPublicJwk, conversationId) {
+    const wrapping = await conversationKey(privateKey, peerPublicJwk, conversationId);
+    const iv = globalThis.crypto.getRandomValues(new Uint8Array(12));
+    const ct = await subtle.encrypt({ name: 'AES-GCM', iv }, wrapping, raw);
+    return { iv: b64(iv), ct: b64(ct) };
+  }
+
+  async function unwrapGroupKey(envelope, privateKey, peerPublicJwk, conversationId) {
+    const wrapping = await conversationKey(privateKey, peerPublicJwk, conversationId);
+    const raw = await subtle.decrypt(
+      { name: 'AES-GCM', iv: unb64(envelope.iv) },
+      wrapping,
+      unb64(envelope.ct),
+    );
+    const key = await subtle.importKey('raw', raw, { name: 'AES-GCM' }, false, [
+      'encrypt',
+      'decrypt',
+    ]);
+    return { key, raw: new Uint8Array(raw) };
+  }
+
   async function encryptJson(key, value) {
     const iv = globalThis.crypto.getRandomValues(new Uint8Array(12));
     const ct = new Uint8Array(
@@ -2346,13 +2620,16 @@ window.IGNAGHT_SINGLE_FILE = true;
     encryptBytes: encryptBytes,
     encryptJson: encryptJson,
     encryptPrivateKey: encryptPrivateKey,
+    generateGroupKey: generateGroupKey,
     generateIdentity: generateIdentity,
     hex: hex,
     randomB64: randomB64,
     safetyNumber: safetyNumber,
     sha256Hex: sha256Hex,
     unb64: unb64,
-    unlockPrivateKey: unlockPrivateKey
+    unlockPrivateKey: unlockPrivateKey,
+    unwrapGroupKey: unwrapGroupKey,
+    wrapGroupKey: wrapGroupKey
   });
 
   /**
@@ -2555,11 +2832,13 @@ window.IGNAGHT_SINGLE_FILE = true;
     convsById: new Map(),
     messages: new Map(),
     keys: new Map(),
+    groupRaw: new Map(),
     peers: new Map(),
     online: new Set(),
     typing: new Map(),
     activeId: null,
     plans: null,
+    bots: [],
     prefs: local.getPrefs(),
     mediaUrls: new Map(),
     mediaBytes: new Map(),
@@ -2812,11 +3091,44 @@ window.IGNAGHT_SINGLE_FILE = true;
     return state.convsById.get(conversationId) || null;
   }
 
+  function convTitle(conv) {
+    if (!conv) return 'Conversación';
+    if (conv.type === 'group') return conv.name || 'Grupo';
+    return conv.peer?.username || 'desconocido';
+  }
+
+  function memberById(conv, userId) {
+    return (conv?.members || []).find((member) => member.id === userId) || null;
+  }
+
+  function senderName(conv, userId) {
+    if (userId === state.user?.id) return 'Tú';
+    return memberById(conv, userId)?.username || conv?.peer?.username || 'alguien';
+  }
+
   function ensureConvKey(conv) {
-    if (!conv?.peer?.publicKey) return Promise.reject(new Error('Falta la clave pública del contacto'));
     const cached = state.keys.get(conv.id);
     if (cached) return Promise.resolve(cached);
-    const promise = conversationKey(state.privateKey, conv.peer.publicKey, conv.id)
+
+    const promise = (async () => {
+      if (conv.type === 'group') {
+        if (!conv.keyEnvelope) throw new Error('Falta la clave cifrada del grupo');
+        // El sobre lo creó un miembro concreto: hay que usar SU clave pública.
+        const wrapper =
+          (conv.members || []).find((member) => member.id === conv.keyEnvelope.by) ||
+          state.user;
+        const { key, raw } = await unwrapGroupKey(
+          conv.keyEnvelope,
+          state.privateKey,
+          wrapper.publicKey,
+          conv.id,
+        );
+        state.groupRaw.set(conv.id, raw);
+        return key;
+      }
+      if (!conv?.peer?.publicKey) throw new Error('Falta la clave pública del contacto');
+      return conversationKey(state.privateKey, conv.peer.publicKey, conv.id);
+    })()
       .then((key) => {
         state.keys.set(conv.id, key);
         return key;
@@ -2825,12 +3137,40 @@ window.IGNAGHT_SINGLE_FILE = true;
         state.keys.delete(conv.id);
         throw err;
       });
+
     state.keys.set(conv.id, promise);
     return promise;
   }
 
+  /** Descifra el nombre del grupo (va cifrado con la clave del grupo). */
+  function ensureConvName(conv) {
+    if (!conv || conv.type !== 'group') return Promise.resolve(convTitle(conv));
+    if (conv.name) return Promise.resolve(conv.name);
+    if (conv._namePromise) return conv._namePromise;
+
+    conv._namePromise = (async () => {
+      try {
+        const key = await ensureConvKey(conv);
+        const plain = await decryptJson(key, conv.nameCipher);
+        conv.name = typeof plain === 'string' ? plain : String(plain?.name || 'Grupo');
+      } catch (err) {
+        console.warn('[e2ee] no se pudo descifrar el nombre del grupo', err);
+        conv.name = 'Grupo';
+      }
+      emit('conv-meta', { id: conv.id });
+      return conv.name;
+    })();
+    return conv._namePromise;
+  }
+
   async function decryptMessage(conv, message) {
+    if (message.deletedAt) return null;
     if (message._plain !== undefined) return message._plain;
+    if (message.plaintext != null) {
+      message._plain = { text: message.plaintext, bot: true };
+      message._error = false;
+      return message._plain;
+    }
     try {
       const key = await ensureConvKey(conv);
       message._plain = await decryptJson(key, message.cipher);
@@ -2843,7 +3183,8 @@ window.IGNAGHT_SINGLE_FILE = true;
     return message._plain;
   }
 
-  function previewFor(plain) {
+  function previewFor(plain, message) {
+    if (message?.deletedAt) return 'Mensaje eliminado';
     if (!plain) return 'Mensaje cifrado';
     if (plain.text) return plain.text;
     const mime = plain.media?.mime || '';
@@ -2851,6 +3192,36 @@ window.IGNAGHT_SINGLE_FILE = true;
     if (mime.startsWith('video/')) return '🎬 Vídeo';
     if (mime.startsWith('audio/')) return '🎵 Audio';
     return '📎 Archivo';
+  }
+
+  function canEditMessage(conv, message) {
+    if (!message || message.deletedAt || message.kind !== 'text') return false;
+    if (message.senderId !== state.user?.id) return false;
+    const hours = Number(state.user?.limits?.editWindowHours ?? 24);
+    if (!hours) return true;
+    return Date.now() - message.createdAt <= hours * 3600 * 1000;
+  }
+
+  function canDeleteMessage(conv, message) {
+    if (!message || message.deletedAt) return false;
+    if (message.senderId === state.user?.id) return true;
+    return conv?.type === 'group' && conv.ownerId === state.user?.id;
+  }
+
+  function canPinMessage(conv, message) {
+    const max = Number(state.user?.limits?.maxPinned || 0);
+    if (max <= 0 || !message || message.deletedAt) return false;
+    const pinned = conv?.pinnedIds || [];
+    return pinned.includes(message.id) || pinned.length < max;
+  }
+
+  function editWindowLabel(hours) {
+    if (!hours) return 'sin límite';
+    if (hours >= 24) {
+      const days = Math.round(hours / 24);
+      return days === 1 ? '24 h' : `${days} días`;
+    }
+    return `${hours} h`;
   }
 
   async function mediaUrlFor(conv, media) {
@@ -2897,6 +3268,17 @@ window.IGNAGHT_SINGLE_FILE = true;
   function avatarHtml(name, { tier = 'free', size = '' } = {}) {
     const hue = hueFor(name);
     return `<span class="avatar ${size ? `avatar-${size}` : ''} ${tier !== 'free' ? `tier-${tier}` : ''}" style="--h:${hue}">${escapeHtml(initials(name))}</span>`;
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+    const input = document.createElement('textarea');
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    input.remove();
+    return Promise.resolve();
   }
 
   /**
@@ -2996,78 +3378,88 @@ window.IGNAGHT_SINGLE_FILE = true;
     convRenderTimer = setTimeout(renderConversationsNow, 30);
   }
 
-  const convNodes = new Map();
-
   function renderConversationsNow() {
     const host = $('#conv-list');
     const empty = $('#conv-empty');
     if (!host) return;
+
     const filter = state.filter.trim().toLowerCase();
-    const list = state.convs.filter((conv) => !filter || String(conv.peer?.username || '').toLowerCase().includes(filter));
-    host.classList.toggle('hidden', !list.length);
-    empty?.classList.toggle('hidden', list.length > 0);
-    if (empty && !list.length) {
-      empty.querySelector('strong').textContent = filter ? 'Sin resultados' : 'Aún no hay conversaciones';
-      empty.querySelector('p').textContent = filter
-        ? `Nadie coincide con “${state.filter}”. Prueba con otro nombre.`
-        : 'Busca a alguien por su nombre de usuario y empieza a hablar en privado.';
-    }
-
-    const ids = new Set(list.map((conv) => conv.id));
-    for (const [id, node] of convNodes) {
-      if (!ids.has(id)) { node.remove(); convNodes.delete(id); }
-    }
-
-    list.forEach((conv, index) => {
-      let node = convNodes.get(conv.id);
-      if (!node) {
-        node = document.createElement('button');
-        node.type = 'button';
-        node.className = 'conv fresh';
-        node.dataset.action = 'open-conv';
-        node.dataset.id = conv.id;
-        node.setAttribute('role', 'listitem');
-        node.addEventListener('animationend', () => node.classList.remove('fresh'), { once: true });
-        convNodes.set(conv.id, node);
-      }
-      const online = state.online.has(conv.peer?.id);
-      const sig = [conv.peer?.username, conv.peer?.plan?.tier, online, conv.unread, conv.lastMessage?.id, conv.lastMessage?.createdAt].join('|');
-      node.classList.toggle('active', conv.id === state.activeId);
-      node.classList.toggle('has-unread', Boolean(conv.unread));
-      if (node.dataset.sig !== sig) {
-        node.dataset.sig = sig;
-        node.innerHTML = `
-        <span class="conv-avatar">
-          ${avatarHtml(conv.peer?.username || '?', { tier: conv.peer?.plan?.tier, size: 'md' })}
-          ${online ? '<i class="online-dot" title="En línea"></i>' : ''}
-        </span>
-        <span class="conv-main">
-          <span class="conv-top">
-            <span class="conv-name">${escapeHtml(conv.peer?.username || 'desconocido')}${planBadge(conv.peer?.plan?.tier)}</span>
-            <span class="conv-time">${conv.lastMessage ? shortTime(conv.lastMessage.createdAt) : ''}</span>
-          </span>
-          <span class="conv-bottom">
-            <span class="conv-preview"></span>
-            ${conv.unread ? `<span class="unread">${conv.unread > 99 ? '99+' : conv.unread}</span>` : ''}
-          </span>
-        </span>`;
-        node.querySelector('.conv-preview').textContent = node._prev || (conv.lastMessage ? 'Mensaje cifrado' : 'Sin mensajes todavía');
-        if (conv.lastMessage) {
-          decryptMessage(conv, conv.lastMessage)
-            .then((plain) => {
-              node._prev = previewFor(plain);
-              const el = node.querySelector('.conv-preview');
-              if (!el) return;
-              el.textContent = node._prev;
-              el.classList.toggle('preview-error', Boolean(conv.lastMessage._error));
-            })
-            .catch(() => {});
-        }
-      }
-      if (host.children[index] !== node) host.insertBefore(node, host.children[index] || null);
+    const list = state.convs.filter((conv) => {
+      if (!filter) return true;
+      return convTitle(conv).toLowerCase().includes(filter);
     });
 
-    setUnreadTotal(state.convs.reduce((sum, conv) => sum + (conv.unread || 0), 0));
+    host.innerHTML = '';
+    if (!list.length) {
+      host.classList.add('hidden');
+      empty?.classList.remove('hidden');
+      if (empty && filter) {
+        empty.querySelector('strong').textContent = 'Sin resultados';
+        empty.querySelector('p').textContent = `Nadie coincide con “${state.filter}”. Prueba con otro nombre.`;
+      } else if (empty) {
+        empty.querySelector('strong').textContent = 'Aún no hay conversaciones';
+        empty.querySelector('p').textContent =
+          'Busca a alguien por su nombre de usuario o crea un grupo cifrado.';
+      }
+    } else {
+      host.classList.remove('hidden');
+      empty?.classList.add('hidden');
+    }
+
+    const fragment = document.createDocumentFragment();
+    for (const conv of list) {
+      const title = convTitle(conv);
+      const node = document.createElement('button');
+      node.type = 'button';
+      node.className = `conv ${conv.id === state.activeId ? 'active' : ''} ${conv.unread ? 'has-unread' : ''}`;
+      node.dataset.action = 'open-conv';
+      node.dataset.id = conv.id;
+      node.setAttribute('role', 'listitem');
+      const online = conv.type === 'group' ? conv.online : state.online.has(conv.peer?.id);
+      node.innerHTML = `
+      <span class="conv-avatar">
+        ${avatarHtml(title, { tier: conv.type === 'group' ? 'free' : conv.peer?.plan?.tier, size: 'md' })}
+        ${conv.type === 'group' ? `<i class="group-dot" title="Grupo">${svgIcon('users', 'ico-xs')}</i>` : online ? '<i class="online-dot" title="En línea"></i>' : ''}
+      </span>
+      <span class="conv-main">
+        <span class="conv-top">
+          <span class="conv-name"></span>
+          <span class="conv-time">${conv.lastMessage ? shortTime(conv.lastMessage.createdAt) : ''}</span>
+        </span>
+        <span class="conv-bottom">
+          <span class="conv-preview">${conv.lastMessage ? (conv.lastMessage.deleted ? 'Mensaje eliminado' : 'Mensaje cifrado') : 'Sin mensajes todavía'}</span>
+          ${conv.unread ? `<span class="unread">${conv.unread > 99 ? '99+' : conv.unread}</span>` : ''}
+        </span>
+      </span>`;
+      const nameEl = node.querySelector('.conv-name');
+      const badge = conv.type === 'group' ? '<span class="group-badge">grupo</span>' : planBadge(conv.peer?.plan?.tier);
+      nameEl.innerHTML = `${escapeHtml(title)}${badge}`;
+      if (conv.type === 'group') ensureConvName(conv).catch(() => {});
+      fragment.appendChild(node);
+    }
+    host.appendChild(fragment);
+    hydrateIcons(host);
+
+    // Descifrado progresivo de las vistas previas (sin bloquear el render).
+    for (const conv of list) {
+      if (!conv.lastMessage) continue;
+      if (conv.lastMessage.deleted) continue;
+      decryptMessage(conv, conv.lastMessage)
+        .then((plain) => {
+          const node = host.querySelector(`.conv[data-id="${conv.id}"] .conv-preview`);
+          if (!node) return;
+          const prefix =
+            conv.type === 'group' && conv.lastMessage.senderId
+              ? `${senderName(conv, conv.lastMessage.senderId)}: `
+              : '';
+          node.textContent = `${prefix}${previewFor(plain, conv.lastMessage)}`;
+          node.classList.toggle('preview-error', Boolean(conv.lastMessage._error));
+        })
+        .catch(() => {});
+    }
+
+    const total = state.convs.reduce((sum, conv) => sum + (conv.unread || 0), 0);
+    setUnreadTotal(total);
   }
 
   // ---------------------------------------------------------------------------
@@ -3090,6 +3482,12 @@ window.IGNAGHT_SINGLE_FILE = true;
       $('#chat-status').innerHTML = '<span class="dot ok"></span> cifrado de extremo a extremo';
       $('#chat-avatar').textContent = '?';
       $('#chat-avatar').className = 'avatar avatar-md';
+      const input = $('#composer-input');
+      if (input) {
+        input.disabled = false;
+        input.placeholder = 'Escribe un mensaje cifrado…';
+      }
+      renderPinned(null);
       return;
     }
 
@@ -3097,26 +3495,86 @@ window.IGNAGHT_SINGLE_FILE = true;
     messages?.classList.remove('hidden');
     composer?.classList.remove('disabled');
 
-    const name = conv.peer?.username || 'desconocido';
-    $('#chat-name').innerHTML = `${escapeHtml(name)}${planBadge(conv.peer?.plan?.tier)}`;
+    const name = convTitle(conv);
+    const isBot = Boolean(conv.peer?.bot);
+    $('#chat-name').innerHTML = `${escapeHtml(name)}${
+    conv.type === 'group'
+      ? '<span class="group-badge">grupo</span>'
+      : isBot
+        ? '<span class="bot-badge">BOT</span>'
+        : planBadge(conv.peer?.plan?.tier)
+  }`;
+    const composerInput = $('#composer-input');
+    if (composerInput) {
+      composerInput.disabled = isBot;
+      composerInput.placeholder = isBot ? 'Este bot solo envía avisos' : 'Escribe un mensaje cifrado…';
+    }
+    composer?.classList.toggle('disabled', isBot);
     const avatar = $('#chat-avatar');
     avatar.textContent = initials(name);
     avatar.style.setProperty('--h', String(hueFor(name)));
-    avatar.className = `avatar avatar-md ${conv.peer?.plan?.tier !== 'free' ? `tier-${conv.peer?.plan?.tier}` : ''}`;
+    avatar.className = `avatar avatar-md ${conv.type === 'group' ? 'avatar-group' : conv.peer?.plan?.tier !== 'free' ? `tier-${conv.peer?.plan?.tier}` : ''}`;
 
-    const online = state.online.has(conv.peer?.id);
     const status = $('#chat-status');
-    if (online) status.innerHTML = '<span class="dot ok"></span> en línea';
-    else if (conv.peer?.lastSeen) status.innerHTML = `visto ${fmtRelative(conv.peer.lastSeen)}`;
-    else status.innerHTML = '<span class="dot"></span> sin conexión';
+    if (isBot) {
+      status.innerHTML = `${svgIcon('bot', 'ico-xs')} bot de avisos · solo envía`;
+    } else if (conv.type === 'group') {
+      if (conv.nameCipher && !conv.name) ensureConvName(conv).catch(() => {});
+      const total = conv.members?.length || conv.participants?.length || 0;
+      const online = (conv.members || []).filter((member) => member.online && member.id !== state.user?.id).length;
+      status.innerHTML = `${svgIcon('lock', 'ico-xs')} ${total} miembros${online ? ` · ${online} en línea` : ''}`;
+    } else {
+      const online = state.online.has(conv.peer?.id);
+      if (online) status.innerHTML = '<span class="dot ok"></span> en línea';
+      else if (conv.peer?.lastSeen) status.innerHTML = `visto ${fmtRelative(conv.peer.lastSeen)}`;
+      else status.innerHTML = '<span class="dot"></span> sin conexión';
+    }
 
-    const mh = $('#messages');
-    const total = (state.messages.get(conv.id) || []).length;
-    if (mh && mh.dataset.conv === conv.id && mh.dataset.count === String(total) && mh.querySelector('.msg')) {
-      updateMessageStatuses(conv);
+    renderPinned(conv);
+    renderMessages().catch((err) => console.warn('[chat]', err));
+  }
+
+  function renderPinned(conv) {
+    const host = $('#pinned-bar');
+    if (!host) return;
+    const pinned = conv?.pinnedMessages || [];
+    if (!pinned.length) {
+      host.hidden = true;
+      host.innerHTML = '';
       return;
     }
-    renderMessages().catch((err) => console.warn('[chat]', err));
+    host.hidden = false;
+    host.innerHTML = `
+    <div class="pinned-head">${svgIcon('pin', 'ico-xs')} <span>Fijados</span></div>
+    <div class="pinned-list">
+      ${pinned
+        .slice(0, 3)
+        .map(
+          (message) =>
+            `<button type="button" class="pinned-item" data-action="jump-msg" data-id="${message.id}">
+              <strong></strong><span class="pinned-text">…</span>
+            </button>`,
+        )
+        .join('')}
+      ${pinned.length > 3 ? `<span class="pinned-more">+${pinned.length - 3}</span>` : ''}
+    </div>`;
+    hydrateIcons(host);
+
+    const nodes = [...host.querySelectorAll('.pinned-item')];
+    pinned.slice(0, 3).forEach((message, index) => {
+      const node = nodes[index];
+      if (!node) return;
+      node.querySelector('strong').textContent = senderName(conv, message.senderId);
+      if (message.deleted) {
+        node.querySelector('.pinned-text').textContent = 'Mensaje eliminado';
+        return;
+      }
+      decryptMessage(conv, message)
+        .then((plain) => {
+          node.querySelector('.pinned-text').textContent = previewFor(plain, message);
+        })
+        .catch(() => {});
+    });
   }
 
   function statusFor(conv, message) {
@@ -3192,19 +3650,18 @@ window.IGNAGHT_SINGLE_FILE = true;
     host.innerHTML = '';
     host.appendChild(fragment);
     hydrateIcons(host);
-    host.dataset.conv = conv.id;
-    host.dataset.count = String(list.length);
     updateMessageStatuses(conv);
     scrollToBottom(true);
   }
 
   function buildMessageNode(conv, message, plain) {
     const out = message.senderId === state.user.id;
+    const deleted = Boolean(message.deletedAt);
     const node = document.createElement('article');
-    node.className = `msg ${out ? 'out' : 'in'}${message._error ? ' failed' : ''}`;
+    node.className = `msg ${out ? 'out' : 'in'}${message._error ? ' failed' : ''}${deleted ? ' deleted' : ''}`;
     node.dataset.id = message.id;
 
-    const media = plain?.media;
+    const media = deleted ? null : plain?.media;
     const kind = !media
       ? 'text'
       : media.mime?.startsWith('video/')
@@ -3215,21 +3672,29 @@ window.IGNAGHT_SINGLE_FILE = true;
             ? 'image'
             : 'file';
 
+    const showSender = !out && conv.type === 'group';
     node.innerHTML = `
     <div class="bubble">
+      ${showSender ? `<span class="msg-sender">${escapeHtml(senderName(conv, message.senderId))}</span>` : ''}
       <div class="bubble-body">
-        ${media ? `<div class="msg-media" data-kind="${kind}"><div class="media-loader"><span class="spinner"></span><em>descifrando…</em></div></div>` : ''}
+        ${
+          deleted
+            ? `<p class="msg-text msg-deleted">${svgIcon('trash', 'ico-xs')} Mensaje eliminado</p>`
+            : `${media ? `<div class="msg-media" data-kind="${kind}"><div class="media-loader"><span class="spinner"></span><em>descifrando…</em></div></div>` : ''}
         ${plain?.text ? '<p class="msg-text"></p>' : ''}
-        ${message._error ? `<div class="msg-failed">${svgIcon('alert', 'ico-xs')} No se pudo descifrar<button type="button" class="link" data-action="retry-msg" data-id="${message.id}">Reintentar</button></div>` : ''}
+        ${message._error ? `<div class="msg-failed">${svgIcon('alert', 'ico-xs')} No se pudo descifrar<button type="button" class="link" data-action="retry-msg" data-id="${message.id}">Reintentar</button></div>` : ''}`
+        }
       </div>
       <div class="msg-meta">
         <span class="msg-time">${fmtTime(message.createdAt)}</span>
-        ${out ? statusMarkup(statusFor(conv, message)) : ''}
-        <span class="msg-lock" title="Cifrado de extremo a extremo">${svgIcon('lock', 'ico-xs')}</span>
+        ${message.editedAt ? '<span class="msg-edited" title="Mensaje editado">editado</span>' : ''}
+        ${out && !deleted ? statusMarkup(statusFor(conv, message)) : ''}
+        ${deleted ? '' : plain?.bot ? `<span class="msg-bot" title="Bot · mensaje en texto plano">${svgIcon('bot', 'ico-xs')} bot</span>` : `<span class="msg-lock" title="Cifrado de extremo a extremo">${svgIcon('lock', 'ico-xs')}</span>`}
+        <button type="button" class="msg-more" data-action="msg-menu" data-id="${message.id}" aria-label="Opciones del mensaje" title="Opciones">${svgIcon('more', 'ico-xs')}</button>
       </div>
     </div>`;
 
-    if (plain?.text) node.querySelector('.msg-text').textContent = plain.text;
+    if (!deleted && plain?.text) node.querySelector('.msg-text').textContent = plain.text;
 
     if (media) {
       const holder = node.querySelector('.msg-media');
@@ -3389,8 +3854,6 @@ window.IGNAGHT_SINGLE_FILE = true;
         const node = buildMessageNode(conv, message, plain);
         node.classList.add('enter');
         host.appendChild(node);
-        host.dataset.conv = conversationId;
-        host.dataset.count = String((state.messages.get(conversationId) || []).length);
         hydrateIcons(node);
         scrollToBottom(false);
       }
@@ -3440,12 +3903,88 @@ window.IGNAGHT_SINGLE_FILE = true;
       host.innerHTML = `<p class="muted center">Abre una conversación para ver sus detalles.</p>`;
       return;
     }
-    const name = conv.peer?.username || 'desconocido';
-    const online = state.online.has(conv.peer?.id);
+
+    const group = conv.type === 'group';
+    const name = convTitle(conv);
+    const isOwner = group && conv.ownerId === state.user?.id;
+    const canExport = Boolean(state.user?.limits?.exportChat);
+    const pinned = conv.pinnedMessages || [];
+    const members = conv.members || [];
+
+    if (group) {
+      if (conv.nameCipher && !conv.name) ensureConvName(conv).catch(() => {});
+      host.innerHTML = `
+      <div class="info-profile">
+        <div class="info-avatar">${avatarHtml(name, { size: 'xl' })}</div>
+        <h3>${escapeHtml(name)}<span class="group-badge">grupo</span></h3>
+        <p class="muted">${members.length} miembros${isOwner ? ' · tú lo creaste' : ''}</p>
+      </div>
+
+      <div class="info-block">
+        <h4>Miembros</h4>
+        <div class="member-list">
+          ${members
+            .map(
+              (member) => `
+            <div class="member-row">
+              <span class="member-avatar">${avatarHtml(member.username, { tier: member.plan?.tier, size: 'sm' })}</span>
+              <span class="member-main">
+                <strong>${escapeHtml(member.username)}${member.id === state.user?.id ? ' <small>(tú)</small>' : ''}</strong>
+                <small>${member.plan?.tier && member.plan.tier !== 'free' ? PLAN_NAMES[member.plan.tier] : 'Gratis'}${member.online ? ' · en línea' : ''}</small>
+              </span>
+              ${member.id === conv.ownerId ? '<span class="member-owner">creador</span>' : ''}
+              ${
+                isOwner && member.id !== state.user?.id
+                  ? `<button type="button" class="icon-btn tiny danger-text" data-action="group-remove-member" data-id="${member.id}" aria-label="Quitar del grupo" title="Quitar del grupo">${svgIcon('close', 'ico-xs')}</button>`
+                  : ''
+              }
+            </div>`,
+            )
+            .join('')}
+        </div>
+        <button class="btn ghost small wide" data-action="group-add-member">${svgIcon('plus', 'ico-xs')} Añadir miembro</button>
+      </div>
+
+      <div class="info-block">
+        <h4>Cifrado</h4>
+        <ul class="mini-list">
+          <li><span>${svgIcon('key', 'ico-xs')}</span> Clave de grupo AES-256-GCM</li>
+          <li><span>${svgIcon('users', 'ico-xs')}</span> Una llave ECDH cifrada por miembro</li>
+          <li><span>${svgIcon('shield', 'ico-xs')}</span> El servidor solo guarda sobres</li>
+        </ul>
+      </div>
+
+      <div class="info-block">
+        <h4>Conversación</h4>
+        <div class="kv"><span>Creada</span><strong>${new Date(conv.createdAt).toLocaleDateString('es-ES')}</strong></div>
+        <div class="kv"><span>Mensajes</span><strong>${(state.messages.get(conv.id) || []).length}</strong></div>
+        <div class="kv"><span>Fijados</span><strong>${pinned.length} / ${state.user?.limits?.maxPinned || 0}</strong></div>
+      </div>
+
+      ${renderPinnedBlock(conv, pinned)}
+
+      <div class="info-actions">
+        ${isOwner ? `<button class="btn ghost small" data-action="group-rename">${svgIcon('gear', 'ico-xs')} Renombrar</button>` : ''}
+        ${canExport ? `<button class="btn ghost small" data-action="export-chat" data-id="${conv.id}">${svgIcon('download', 'ico-xs')} Exportar</button>` : ''}
+        <button class="btn ghost small" data-action="refresh-chat" data-id="${conv.id}">${svgIcon('refresh', 'ico-xs')} Recargar</button>
+        ${
+          isOwner
+            ? `<button class="btn ghost small danger-text" data-action="group-delete" data-id="${conv.id}">${svgIcon('trash', 'ico-xs')} Borrar grupo</button>`
+            : `<button class="btn ghost small danger-text" data-action="group-leave" data-id="${conv.id}">${svgIcon('logout', 'ico-xs')} Salir del grupo</button>`
+        }
+        <button class="btn ghost small danger-text" data-action="clear-local" data-id="${conv.id}">${svgIcon('trash', 'ico-xs')} Borrar copia local</button>
+      </div>`;
+      hydrateIcons(host);
+      fillPinnedTexts(host, conv, pinned);
+      return;
+    }
+
+    const peer = conv.peer || {};
+    const online = state.online.has(peer.id);
     host.innerHTML = `
     <div class="info-profile">
-      <div class="info-avatar">${avatarHtml(name, { tier: conv.peer?.plan?.tier, size: 'xl' })}</div>
-      <h3>${escapeHtml(name)}${planBadge(conv.peer?.plan?.tier)}</h3>
+      <div class="info-avatar">${avatarHtml(peer.username || 'desconocido', { tier: peer.plan?.tier, size: 'xl' })}</div>
+      <h3>${escapeHtml(peer.username || 'desconocido')}${planBadge(peer.plan?.tier)}</h3>
       <p class="muted">${online ? '<span class="dot ok"></span> en línea' : 'sin conexión'}</p>
     </div>
 
@@ -3468,23 +4007,65 @@ window.IGNAGHT_SINGLE_FILE = true;
       <h4>Conversación</h4>
       <div class="kv"><span>Creada</span><strong>${new Date(conv.createdAt).toLocaleDateString('es-ES')}</strong></div>
       <div class="kv"><span>Mensajes</span><strong>${(state.messages.get(conv.id) || []).length}</strong></div>
+      <div class="kv"><span>Fijados</span><strong>${pinned.length} / ${state.user?.limits?.maxPinned || 0}</strong></div>
     </div>
 
+    ${renderPinnedBlock(conv, pinned)}
+
     <div class="info-actions">
+      ${canExport ? `<button class="btn ghost small" data-action="export-chat" data-id="${conv.id}">${svgIcon('download', 'ico-xs')} Exportar</button>` : ''}
       <button class="btn ghost small" data-action="refresh-chat" data-id="${conv.id}">${svgIcon('refresh', 'ico-xs')} Recargar</button>
       <button class="btn ghost small danger-text" data-action="clear-local" data-id="${conv.id}">${svgIcon('trash', 'ico-xs')} Borrar copia local</button>
     </div>`;
 
+    hydrateIcons(host);
+    fillPinnedTexts(host, conv, pinned);
+
     try {
       const { safetyNumber } = await Promise.resolve().then(function () { return crypto$1; });
       if (state.activeId !== conv.id) return;
-      const fp = await safetyNumber(state.user.publicKey, conv.peer.publicKey);
+      const fp = await safetyNumber(state.user.publicKey, peer.publicKey);
       const node = $('#info-fingerprint');
       if (node) node.textContent = fp;
     } catch {
       const node = $('#info-fingerprint');
       if (node) node.textContent = 'no disponible';
     }
+  }
+
+  function renderPinnedBlock(conv, pinned) {
+    if (!pinned.length) return '';
+    return `
+    <div class="info-block">
+      <h4>${svgIcon('pin', 'ico-xs')} Mensajes fijados</h4>
+      <div class="pinned-info-list">
+        ${pinned
+          .map(
+            (message) => `
+          <div class="pinned-info" data-id="${message.id}">
+            <div class="pinned-info-main">
+              <strong>${escapeHtml(senderName(conv, message.senderId))}</strong>
+              <span class="pinned-text">…</span>
+            </div>
+            <button type="button" class="icon-btn tiny" data-action="unpin-message" data-id="${message.id}" title="Quitar de fijados" aria-label="Quitar de fijados">${svgIcon('close', 'ico-xs')}</button>
+          </div>`,
+          )
+          .join('')}
+      </div>
+    </div>`;
+  }
+
+  function fillPinnedTexts(root, conv, pinned) {
+    const nodes = [...root.querySelectorAll('.pinned-info')];
+    pinned.forEach((message, index) => {
+      const node = nodes[index];
+      if (!node) return;
+      decryptMessage(conv, message)
+        .then((plain) => {
+          node.querySelector('.pinned-text').textContent = previewFor(plain, message);
+        })
+        .catch(() => {});
+    });
   }
 
   // ---------------------------------------------------------------------------
@@ -3500,69 +4081,109 @@ window.IGNAGHT_SINGLE_FILE = true;
     if (!host) return;
     const data = state.plans;
     if (!data) {
-      if (!host.dataset.built) host.innerHTML = '<div class="plans-skeleton"><span class="spinner"></span> Cargando planes…</div>';
+      host.innerHTML = `<div class="plans-skeleton"><span class="spinner"></span> Cargando planes…</div>`;
       return;
     }
-    const { current, plans } = data;
-    if (host.dataset.built !== '1') {
-      host.innerHTML = `
-      <section class="plan-hero">
-        <div class="ring" id="plan-ring"><span id="plan-pct">0%</span></div>
-        <div class="plan-hero-main">
-          <span class="plan-current-kicker">Tu plan</span>
-          <h2 id="plan-name"></h2>
-          <p class="muted" id="plan-exp"></p>
-          <div class="chips"><span id="plan-chip-file"></span><span id="plan-chip-vault"></span></div>
-        </div>
-      </section>
-      <section class="redeem-card">
-        <h3>${svgIcon('key', 'ico-sm')} Canjear código</h3>
-        <form id="redeem-form" class="redeem" autocomplete="off">
-          <span class="field-wrap">
-            <span class="field-ico">${svgIcon('key')}</span>
-            <input id="redeem-code" placeholder="IGN-XXXXX-XXXXX" maxlength="15" spellcheck="false" autocomplete="off" autocapitalize="characters" enterkeyhint="go">
-            <button type="button" class="field-eye" data-action="paste-code" aria-label="Pegar código">${svgIcon('copy')}</button>
-          </span>
-          <button class="btn primary" type="submit">${svgIcon('spark', 'ico-xs')} Canjear</button>
-        </form>
-      </section>
-      <section class="tiers-section"><h3>Planes</h3><div class="tiers" id="plan-tiers"></div></section>`;
-      host.dataset.built = '1';
-    }
-    const set = (id, value) => { const n = $('#' + id); if (n && n.textContent !== value) n.textContent = value; };
-    const used = current.usage?.mediaBytes || 0;
-    const pct = Math.min(100, Math.round((used / Math.max(1, current.limits.storageBytes)) * 100));
+
+    const { current, codes, plans } = data;
     const expires = current.expiresAt
       ? new Date(current.expiresAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
       : null;
-    set('plan-name', current.name + (current.active ? '' : ' (expirado)'));
-    set('plan-exp', expires ? `Válido hasta el ${expires}` : 'Plan gratuito permanente');
-    set('plan-pct', `${pct}%`);
-    $('#plan-ring')?.style.setProperty('--p', String(pct));
-    set('plan-chip-file', `${current.limits.maxUploadMB} MB por archivo`);
-    set('plan-chip-vault', `${fmtBytes(used)} de ${gb(current.limits.storageMB)}`);
-    const tiers = $('#plan-tiers');
-    const key = plans.map((plan) => plan.id).join();
-    if (tiers.dataset.key !== key) {
-      tiers.dataset.key = key;
-      tiers.innerHTML = plans.map((plan) => `
-        <article class="tier-card ${plan.id === 'elite' ? 'is-elite' : ''}" data-id="${plan.id}" style="--tier-color:${plan.color}">
+    const usedPct = Math.min(
+      100,
+      Math.round(((current.usage?.mediaBytes || 0) / Math.max(1, current.limits.storageBytes)) * 100),
+    );
+    const groupCount = state.convs.filter((conv) => conv.type === 'group').length;
+
+    const tiers = plans
+      .map((plan) => {
+        const isCurrent = plan.id === current.tier;
+        const storage = gb(plan.storageMB);
+        return `
+        <article class="tier-card ${isCurrent ? 'is-current' : ''} ${plan.id === 'elite' ? 'is-elite' : ''}" style="--tier-color:${plan.color}">
           <div class="tier-glow"></div>
-          <header><h3>${escapeHtml(plan.name)}</h3><span class="tier-tag">${plan.id === 'free' ? 'incluido' : 'con código'}</span></header>
+          <header>
+            <h3>${plan.name}</h3>
+            ${plan.id === 'free' ? '<span class="tier-tag">incluido</span>' : '<span class="tier-tag">código IGNAGHT</span>'}
+          </header>
           <p class="tier-tagline">${escapeHtml(plan.tagline)}</p>
           <ul class="tier-perks">${plan.perks.map((perk) => `<li>${svgIcon('check', 'ico-xs')}${escapeHtml(perk)}</li>`).join('')}</ul>
-          <div class="tier-specs"><span>${plan.maxUploadMB} MB / archivo</span><span>${gb(plan.storageMB)} de bóveda</span></div>
-          <span class="tier-current-flag" hidden>Tu plan</span>
-        </article>`).join('');
-    }
-    $$('.tier-card', tiers).forEach((card) => {
-      const cur = card.dataset.id === current.tier;
-      card.classList.toggle('is-current', cur);
-      card.querySelector('.tier-current-flag').hidden = !cur;
-    });
+          <div class="tier-specs">
+            <span>${plan.maxUploadMB} MB / archivo</span>
+            <span>${storage} de bóveda</span>
+            <span>${plan.maxGroups} grupos · ${plan.maxGroupMembers} pers.</span>
+            <span>Editar ${editWindowLabel(plan.editWindowHours)} · ${plan.maxPinned} fijados</span>
+          </div>
+          ${isCurrent ? '<span class="tier-current-flag">Tu plan actual</span>' : ''}
+        </article>`;
+      })
+      .join('');
+
+    host.innerHTML = `
+    <section class="plan-current">
+      <div class="plan-current-main">
+        <span class="plan-current-kicker">Tu plan</span>
+        <h2>${escapeHtml(current.name)}${current.active ? '' : ' <small>(expirado)</small>'}</h2>
+        <p class="muted">${expires ? `Válido hasta el ${expires}` : 'Plan gratuito permanente'}</p>
+      </div>
+      <div class="plan-usage">
+        <div class="usage-row"><span>Bóveda multimedia</span><strong>${fmtBytes(current.usage?.mediaBytes || 0)} / ${gb(current.limits.storageMB)}</strong></div>
+        <div class="usage-bar"><i style="width:${usedPct}%"></i></div>
+        <div class="usage-row small"><span>Máximo por archivo</span><strong>${current.limits.maxUploadMB} MB</strong></div>
+        <div class="usage-row small"><span>Grupos</span><strong>${groupCount} / ${current.limits.maxGroups}</strong></div>
+        <div class="usage-row small"><span>Ventana de edición</span><strong>${editWindowLabel(current.limits.editWindowHours)}</strong></div>
+        <div class="usage-row small"><span>Mensajes fijados</span><strong>${current.limits.maxPinned} / chat</strong></div>
+      </div>
+    </section>
+
+    <section class="codes-panel">
+      <header class="codes-head">
+        <div>
+          <h3>${svgIcon('spark', 'ico-sm')} Códigos IGNAGHT</h3>
+          <p class="muted">El servidor fabrica una tanda nueva cada ${codes.intervalHours} h: mínimo ${codes.base} códigos, más ${codes.perNewUser} por cada usuario nuevo.</p>
+        </div>
+        <div class="codes-countdown">
+          <span>Próxima tanda</span>
+          <strong id="plan-countdown">--:--:--</strong>
+        </div>
+      </header>
+
+      <div class="codes-grid">
+        <div class="stat-card"><span class="stat-kicker">Tanda actual</span><strong>${codes.lastBatch ? codes.lastBatch.count : 0}</strong><small>${codes.lastBatch ? `${codes.lastBatch.id} · ${new Date(codes.lastBatch.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}` : 'generando…'}</small></div>
+        <div class="stat-card"><span class="stat-kicker">Disponibles ahora</span><strong>${codes.totals.available}</strong><small>sin canjear y sin caducar</small></div>
+        <div class="stat-card"><span class="stat-kicker">Usuarios nuevos</span><strong>+${codes.newUsersSinceBatch}</strong><small>próxima tanda: ${codes.upcomingCount} códigos</small></div>
+        <div class="stat-card"><span class="stat-kicker">Canjeados</span><strong>${codes.totals.redeemed}</strong><small>de ${codes.totals.generated} generados</small></div>
+      </div>
+
+      <form id="redeem-form" class="redeem" autocomplete="off">
+        <label class="field">
+          <span class="field-label">Canjear un código</span>
+          <span class="field-wrap">
+            <span class="field-ico">${svgIcon('key')}</span>
+            <input id="redeem-code" placeholder="IGN-XXXXX-XXXXX" maxlength="15" spellcheck="false" autocomplete="off">
+          </span>
+        </label>
+        <button class="btn primary" type="submit">${svgIcon('spark', 'ico-xs')} Canjear</button>
+      </form>
+      <p class="codes-note">${svgIcon('info', 'ico-xs')} Los códigos caducan a los ${codes.ttlHours} h y cada uno solo puede usarse una vez. Consigue uno de alguien que ya esté dentro, del canal oficial o del panel de administración.</p>
+    </section>
+
+    <section class="tiers-section">
+      <h3>Niveles de la bóveda</h3>
+      <div class="tiers">${tiers}</div>
+    </section>`;
+
+    hydrateIcons(host);
+    tickPlans();
   }
 
-  function tickPlans() {}
+  function tickPlans() {
+    const node = $('#plan-countdown');
+    if (!node || !state.plans?.codes?.nextBatchAt) return;
+    const left = state.plans.codes.nextBatchAt - Date.now();
+    node.textContent = fmtCountdown(left);
+    node.classList.toggle('soon', left < 3600 * 1000);
+  }
 
   // ---------------------------------------------------------------------------
   // Ajustes
@@ -3577,8 +4198,14 @@ window.IGNAGHT_SINGLE_FILE = true;
       ? new Date(plan.expiresAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
       : 'para siempre';
     const apiLabel = state.api.base || location.origin;
-    const scroller = host.closest('.view');
-    const keepTop = scroller ? scroller.scrollTop : 0;
+    const themes = [
+      'violet',
+      'cyan',
+      'emerald',
+      'rose',
+      ...(user.limits?.extraThemes ? ['sunset', 'ocean', 'candy', 'mono'] : []),
+    ];
+    const groupCount = state.convs.filter((conv) => conv.type === 'group').length;
 
     host.innerHTML = `
     <section class="set-card">
@@ -3593,6 +4220,31 @@ window.IGNAGHT_SINGLE_FILE = true;
       </div>
       <div class="kv"><span>Miembro desde</span><strong>${new Date(user.createdAt).toLocaleDateString('es-ES')}</strong></div>
       <div class="kv"><span>Bóveda usada</span><strong>${fmtBytes(user.usage?.mediaBytes || 0)} / ${gb(user.limits?.storageMB || 200)}</strong></div>
+      <div class="kv"><span>Grupos</span><strong>${groupCount} / ${user.limits?.maxGroups ?? 3} · hasta ${user.limits?.maxGroupMembers ?? 6} personas</strong></div>
+      <div class="kv"><span>Edición y fijados</span><strong>${editWindowLabel(user.limits?.editWindowHours ?? 24)} · ${user.limits?.maxPinned ?? 0} fijados</strong></div>
+    </section>
+
+    <section class="set-card">
+      <h3>${svgIcon('bot', 'ico-sm')} Bots públicos</h3>
+      <p class="set-hint">Avisos automáticos por API (pedidos, alertas, estado). El bot escribe en texto plano y no puede leer tus mensajes cifrados.</p>
+      <div class="kv"><span>Bots activos</span><strong>${(state.bots || []).filter((bot) => !bot.revoked).length} / ${user.limits?.maxBots ?? 0}</strong></div>
+      ${(state.bots || []).filter((bot) => !bot.revoked).length
+        ? `<div class="bot-list">${(state.bots || [])
+            .filter((bot) => !bot.revoked)
+            .map(
+              (bot) => `<div class="bot-row">
+                <span class="bot-avatar">${svgIcon('bot', 'ico-sm')}</span>
+                <span class="bot-main"><strong>${escapeHtml(bot.name)}</strong><small>@${escapeHtml(bot.username)} · ${bot.messagesSent} avisos</small></span>
+                <button class="icon-btn tiny danger-text" data-action="bot-revoke" data-id="${bot.id}" title="Revocar bot" aria-label="Revocar bot">${svgIcon('trash', 'ico-xs')}</button>
+              </div>`,
+            )
+            .join('')}</div>`
+        : '<p class="set-hint small">Todavía no tienes bots.</p>'}
+      <div class="bot-actions">
+        <button class="btn ghost small" data-action="bot-create" ${(user.limits?.maxBots ?? 0) <= 0 ? 'disabled' : ''}>${svgIcon('plus', 'ico-xs')} Crear bot</button>
+        <button class="btn ghost small" data-action="bot-api">${svgIcon('globe', 'ico-xs')} Ver API</button>
+      </div>
+      ${(user.limits?.maxBots ?? 0) <= 0 ? '<p class="set-hint small">Los bots se desbloquean con Plus o superior.</p>' : ''}
     </section>
 
     <section class="set-card">
@@ -3607,13 +4259,14 @@ window.IGNAGHT_SINGLE_FILE = true;
       <div class="set-row">
         <div><strong>Color de acento</strong><small class="muted">Cambia el brillo de toda la app</small></div>
         <div class="theme-row">
-          ${['violet', 'cyan', 'emerald', 'rose']
+          ${themes
             .map(
               (theme) =>
                 `<button class="theme-dot theme-${theme} ${prefs.theme === theme ? 'active' : ''}" data-action="set-theme" data-value="${theme}" aria-label="Tema ${theme}"></button>`,
             )
             .join('')}
         </div>
+        ${user.limits?.extraThemes ? '' : '<p class="set-hint small">Los temas extra se desbloquean con Plus o superior.</p>'}
       </div>
 
       <div class="set-row">
@@ -3667,22 +4320,12 @@ window.IGNAGHT_SINGLE_FILE = true;
       }
     </section>
 
-    <section class="set-card">
-      <h3>${svgIcon('phone', 'ico-sm')} Esta app</h3>
-      <div class="set-row">
-        <div><strong>Vibración al tocar</strong><small class="muted">Respuesta háptica en el móvil</small></div>
-        <button class="switch ${prefs.haptics !== false ? 'on' : ''}" data-action="toggle-haptics" aria-label="Vibración"><i></i></button>
-      </div>
-      ${deferredInstall ? `<div class="set-row"><div><strong>Instalar IGNAGHT</strong><small class="muted">Añádela a tu pantalla de inicio</small></div><button class="btn ghost small" data-action="install-app">${svgIcon('install', 'ico-xs')} Instalar</button></div>` : ''}
-    </section>
-
     <section class="set-card about-card">
       <h3>${svgIcon('spark', 'ico-sm')} Acerca de</h3>
       <p class="muted small">IGNAGHT ${escapeHtml(state.serverInfo?.version || '1.0.0')}</p>
     </section>`;
 
     hydrateIcons(host);
-    if (scroller) scroller.scrollTop = keepTop;
 
     try {
       const { sha256Hex } = await Promise.resolve().then(function () { return crypto$1; });
@@ -3741,11 +4384,17 @@ window.IGNAGHT_SINGLE_FILE = true;
   // Modales de contenido
   // ---------------------------------------------------------------------------
 
-  function openNewChatModal(onSubmit) {
+  function openNewChatModal({ onCreateDirect, onCreateGroup, lookupUser, limits }) {
+    const maxMembers = Number(limits?.maxGroupMembers || 6);
     const modal = openModal({
       title: 'Nueva conversación',
-      subtitle: 'Escribe el nombre de usuario exacto de la persona.',
+      subtitle: 'Habla en privado o crea un grupo cifrado.',
       body: `
+      <div class="chat-tabs" role="tablist" aria-label="Tipo de conversación">
+        <button type="button" class="chat-tab active" data-chat-tab="direct" role="tab" aria-selected="true">${svgIcon('chat', 'ico-xs')} Directa</button>
+        <button type="button" class="chat-tab" data-chat-tab="group" role="tab" aria-selected="false">${svgIcon('users', 'ico-xs')} Grupo</button>
+      </div>
+
       <form id="new-chat-form" novalidate>
         <label class="field">
           <span class="field-label">Usuario</span>
@@ -3756,19 +4405,62 @@ window.IGNAGHT_SINGLE_FILE = true;
         </label>
         <p class="form-error" id="new-chat-error" hidden></p>
         <button class="btn primary wide" type="submit">${svgIcon('chat', 'ico-xs')} Abrir conversación</button>
+      </form>
+
+      <form id="new-group-form" class="hidden" novalidate>
+        <label class="field">
+          <span class="field-label">Nombre del grupo</span>
+          <span class="field-wrap">
+            <span class="field-ico">${svgIcon('users')}</span>
+            <input id="new-group-name" placeholder="Los de siempre" maxlength="60" autocomplete="off">
+          </span>
+        </label>
+        <label class="field">
+          <span class="field-label">Añadir miembro por usuario exacto</span>
+          <span class="field-wrap">
+            <span class="field-ico">${svgIcon('users')}</span>
+            <input id="new-group-member" placeholder="@usuario" maxlength="20" autocomplete="off" spellcheck="false" autocapitalize="none">
+            <button type="button" class="btn ghost small field-add" id="new-group-add">Añadir</button>
+          </span>
+        </label>
+        <p class="member-hint" id="new-group-hint">Tu plan permite ${maxMembers} personas en el grupo.</p>
+        <div class="member-picker" id="new-group-members"></div>
+        <p class="form-error" id="new-group-error" hidden></p>
+        <button class="btn primary wide" type="submit" id="new-group-submit">${svgIcon('users', 'ico-xs')} Crear grupo cifrado</button>
       </form>`,
     });
-    const form = $('#new-chat-form', modal.root);
+
+    const tabs = [...modal.root.querySelectorAll('[data-chat-tab]')];
+    const directForm = $('#new-chat-form', modal.root);
+    const groupForm = $('#new-group-form', modal.root);
+    const switchTab = (tab) => {
+      tabs.forEach((button) => {
+        const active = button.dataset.chatTab === tab;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', String(active));
+      });
+      directForm.classList.toggle('hidden', tab !== 'direct');
+      groupForm.classList.toggle('hidden', tab !== 'group');
+      setTimeout(() => {
+        if (tab === 'direct') $('#new-chat-username', modal.root)?.focus();
+        else $('#new-group-name', modal.root)?.focus();
+      }, 80);
+    };
+    tabs.forEach((button) => {
+      button.addEventListener('click', () => switchTab(button.dataset.chatTab));
+    });
+
+    // --- Directa ---
     const input = $('#new-chat-username', modal.root);
     const errorEl = $('#new-chat-error', modal.root);
-    const submit = form.querySelector('button[type="submit"]');
+    const submit = directForm.querySelector('button[type="submit"]');
 
     const fail = (message) => {
       errorEl.textContent = message;
       errorEl.hidden = !message;
     };
 
-    form.addEventListener('submit', async (event) => {
+    directForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       fail('');
       const username = input.value.trim().replace(/^@+/, '');
@@ -3778,12 +4470,107 @@ window.IGNAGHT_SINGLE_FILE = true;
       }
       submit.disabled = true;
       try {
-        await onSubmit(username);
+        await onCreateDirect(username);
         modal.close();
       } catch (err) {
         fail(err?.message || 'No se pudo abrir la conversación.');
       } finally {
         submit.disabled = false;
+      }
+    });
+
+    // --- Grupo ---
+    const members = [];
+    const groupName = $('#new-group-name', modal.root);
+    const memberInput = $('#new-group-member', modal.root);
+    const addButton = $('#new-group-add', modal.root);
+    const groupError = $('#new-group-error', modal.root);
+    const groupSubmit = $('#new-group-submit', modal.root);
+    const membersHost = $('#new-group-members', modal.root);
+
+    const groupFail = (message) => {
+      groupError.textContent = message;
+      groupError.hidden = !message;
+    };
+
+    const renderMembers = () => {
+      membersHost.innerHTML = members
+        .map(
+          (member) => `
+        <span class="member-chip">
+          ${avatarHtml(member.username, { tier: member.plan?.tier, size: 'sm' })}
+          <span>${escapeHtml(member.username)}</span>
+          <button type="button" data-remove-member="${escapeHtml(member.id)}" aria-label="Quitar a ${escapeHtml(member.username)}">${svgIcon('close', 'ico-xs')}</button>
+        </span>`,
+        )
+        .join('');
+    };
+
+    const addMember = async () => {
+      groupFail('');
+      const username = memberInput.value.trim().replace(/^@+/, '');
+      if (!/^[a-zA-Z0-9._-]{3,20}$/.test(username)) {
+        groupFail('Escribe un usuario válido.');
+        return;
+      }
+      if (members.length >= maxMembers - 1) {
+        groupFail(`Tu plan permite ${maxMembers} personas en total (tú incluido).`);
+        return;
+      }
+      addButton.disabled = true;
+      try {
+        const found = await lookupUser(username);
+        if (!found?.user) throw new Error('No existe ningún usuario con ese nombre.');
+        if (found.user.id === state.user?.id) throw new Error('Ya estás en el grupo.');
+        if (members.some((member) => member.id === found.user.id)) {
+          throw new Error('Esa persona ya está añadida.');
+        }
+        members.push(found.user);
+        memberInput.value = '';
+        renderMembers();
+        memberInput.focus();
+      } catch (err) {
+        groupFail(err?.message || 'No se pudo añadir a esa persona.');
+      } finally {
+        addButton.disabled = false;
+      }
+    };
+
+    addButton.addEventListener('click', addMember);
+    memberInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        addMember();
+      }
+    });
+    membersHost.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-remove-member]');
+      if (!button) return;
+      const index = members.findIndex((member) => member.id === button.dataset.removeMember);
+      if (index >= 0) members.splice(index, 1);
+      renderMembers();
+    });
+
+    groupForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      groupFail('');
+      const name = groupName.value.trim();
+      if (name.length < 2) {
+        groupFail('Ponle un nombre al grupo (mínimo 2 caracteres).');
+        return;
+      }
+      if (!members.length) {
+        groupFail('Añade al menos a otra persona al grupo.');
+        return;
+      }
+      groupSubmit.disabled = true;
+      try {
+        await onCreateGroup(name, members);
+        modal.close();
+      } catch (err) {
+        groupFail(err?.message || 'No se pudo crear el grupo.');
+      } finally {
+        groupSubmit.disabled = false;
       }
     });
 
@@ -4033,11 +4820,12 @@ window.IGNAGHT_SINGLE_FILE = true;
   let recCancelled = false;
 
   const MAX_RECORD_MS = 5 * 60 * 1000;
-  let deferredInstall = null;
-  const buzz = (pattern = 8) => {
-    if (state.prefs.haptics === false || !navigator.vibrate) return;
-    try { navigator.vibrate(pattern); } catch { /* nada */ }
-  };
+
+  function newConvId() {
+    return [...globalThis.crypto.getRandomValues(new Uint8Array(8))]
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
+  }
 
   // ---------------------------------------------------------------------------
   // Arranque
@@ -4409,6 +5197,7 @@ window.IGNAGHT_SINGLE_FILE = true;
     state.convsById.clear();
     state.messages.clear();
     state.keys.clear();
+    state.groupRaw.clear();
     state.activeId = null;
     messagesLoaded.clear();
     setScreen('auth');
@@ -4438,6 +5227,13 @@ window.IGNAGHT_SINGLE_FILE = true;
     state.convs = data.conversations || [];
     state.convsById = new Map(state.convs.map((conv) => [conv.id, conv]));
     for (const conv of state.convs) {
+      if (conv.type === 'group') {
+        ensureConvName(conv).catch(() => {});
+        for (const member of conv.members || []) {
+          if (member.id !== state.user?.id) state.peers.set(member.id, member);
+        }
+        continue;
+      }
       if (!conv.peer) continue;
       state.peers.set(conv.peer.id, conv.peer);
       if (conv.online) state.online.add(conv.peer.id);
@@ -4591,7 +5387,9 @@ window.IGNAGHT_SINGLE_FILE = true;
         const data = JSON.parse(event.data);
         const conv = getConv(data.conversationId);
         if (!conv) return;
-        if (data.conversationId === state.activeId) showTyping(conv.peer?.username || 'alguien');
+        if (data.conversationId === state.activeId) {
+          showTyping(senderName(conv, data.userId));
+        }
       } catch {
         /* nada */
       }
@@ -4625,6 +5423,10 @@ window.IGNAGHT_SINGLE_FILE = true;
         const data = JSON.parse(event.data);
         const conv = getConv(data.conversationId);
         if (!conv) return;
+        if (conv.type === 'group') {
+          refreshConversations();
+          return;
+        }
         conv.peerDeliveredAt = Math.max(conv.peerDeliveredAt || 0, data.at || 0);
         if (conv.id === state.activeId) updateMessageStatuses(conv);
       } catch {
@@ -4637,9 +5439,107 @@ window.IGNAGHT_SINGLE_FILE = true;
         const data = JSON.parse(event.data);
         const conv = getConv(data.conversationId);
         if (!conv) return;
+        if (conv.type === 'group') {
+          refreshConversations();
+          return;
+        }
         conv.peerReadAt = Math.max(conv.peerReadAt || 0, data.at || 0);
         conv.peerDeliveredAt = Math.max(conv.peerDeliveredAt || 0, data.at || 0);
         if (conv.id === state.activeId) updateMessageStatuses(conv);
+      } catch {
+        /* nada */
+      }
+    });
+
+    source.addEventListener('message-edit', (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        const conv = getConv(data.conversationId);
+        if (!conv) return;
+        const message = (state.messages.get(conv.id) || []).find((m) => m.id === data.messageId);
+        if (message) {
+          message.cipher = data.cipher;
+          message.editedAt = data.editedAt;
+          message.editCount = data.editCount;
+          delete message._plain;
+          delete message._error;
+        }
+        if (conv.lastMessage?.id === data.messageId) {
+          conv.lastMessage.cipher = data.cipher;
+          conv.lastMessage.editedAt = data.editedAt;
+        }
+        if (data.conversation) Object.assign(conv, data.conversation);
+        renderConversations();
+        if (conv.id === state.activeId) {
+          renderChat();
+          renderInfo();
+        }
+      } catch {
+        /* nada */
+      }
+    });
+
+    source.addEventListener('message-delete', (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        const conv = getConv(data.conversationId);
+        if (!conv) return;
+        const message = (state.messages.get(conv.id) || []).find((m) => m.id === data.messageId);
+        if (message) {
+          message.cipher = '';
+          message.deletedAt = data.deletedAt;
+          message.deletedBy = data.deletedBy;
+          delete message._plain;
+        }
+        conv.pinnedIds = (conv.pinnedIds || []).filter((id) => id !== data.messageId);
+        conv.pinnedMessages = (conv.pinnedMessages || []).filter((m) => m.id !== data.messageId);
+        if (conv.lastMessage?.id === data.messageId) {
+          conv.lastMessage.deleted = true;
+          conv.lastMessage.cipher = '';
+        }
+        renderConversations();
+        if (conv.id === state.activeId) {
+          renderChat();
+          renderInfo();
+        }
+      } catch {
+        /* nada */
+      }
+    });
+
+    source.addEventListener('pins', (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        const conv = getConv(data.conversationId);
+        if (!conv) return;
+        if (data.conversation) Object.assign(conv, data.conversation);
+        else conv.pinnedIds = data.pinnedIds || [];
+        if (conv.id === state.activeId) {
+          renderPinned(conv);
+          renderInfo();
+        }
+      } catch {
+        /* nada */
+      }
+    });
+
+    source.addEventListener('conversation-removed', (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        state.convs = state.convs.filter((conv) => conv.id !== data.conversationId);
+        state.convsById.delete(data.conversationId);
+        state.messages.delete(data.conversationId);
+        state.keys.delete(data.conversationId);
+        state.groupRaw.delete(data.conversationId);
+        messagesLoaded.delete(data.conversationId);
+        if (state.activeId === data.conversationId) {
+          state.activeId = null;
+          renderChat();
+          renderInfo();
+        }
+        renderConversations();
+        if (data.reason === 'removed') toast('Te han quitado de un grupo.', 'warn');
+        if (data.reason === 'deleted') toast('El grupo se ha borrado.', 'info');
       } catch {
         /* nada */
       }
@@ -4697,10 +5597,31 @@ window.IGNAGHT_SINGLE_FILE = true;
         const active = getConv(conversationId);
         if (active) updateMessageStatuses(active);
         const data = await state.api.messages(conversationId, { limit: 40 });
-        const known = new Set((state.messages.get(conversationId) || []).map((m) => m.id));
-        const fresh = (data.messages || []).filter((m) => !known.has(m.id));
-        for (const message of fresh) await handleIncoming(conversationId, message);
-        if (fresh.length) state.api.markRead(conversationId).catch(() => {});
+        const known = new Map((state.messages.get(conversationId) || []).map((m) => [m.id, m]));
+        let changed = false;
+        for (const message of data.messages || []) {
+          const existing = known.get(message.id);
+          if (!existing) {
+            await handleIncoming(conversationId, message);
+            changed = true;
+            continue;
+          }
+          if (
+            existing.cipher !== message.cipher ||
+            Boolean(existing.deletedAt) !== Boolean(message.deletedAt) ||
+            existing.editedAt !== message.editedAt
+          ) {
+            Object.assign(existing, message);
+            delete existing._plain;
+            delete existing._error;
+            changed = true;
+          }
+        }
+        if (changed) {
+          if (conversationId === state.activeId) renderChat();
+          renderConversations();
+        }
+        if (data.messages?.length) state.api.markRead(conversationId).catch(() => {});
       }
     } catch (err) {
       if (err.status === 401) sessionExpired();
@@ -4734,6 +5655,8 @@ window.IGNAGHT_SINGLE_FILE = true;
       cipher: message.cipher,
       kind: message.kind,
       createdAt: message.createdAt,
+      editedAt: message.editedAt || null,
+      deleted: Boolean(message.deletedAt),
     };
     conv.updatedAt = message.createdAt;
 
@@ -4756,13 +5679,17 @@ window.IGNAGHT_SINGLE_FILE = true;
     let body = 'Nuevo mensaje cifrado';
     try {
       const plain = await decryptMessage(conv, message);
-      body = previewFor(plain).slice(0, 120);
+      body = previewFor(plain, message).slice(0, 120);
     } catch {
       /* nada */
     }
+    const title =
+      conv.type === 'group'
+        ? `${convTitle(conv)} · ${senderName(conv, message.senderId)}`
+        : `@${conv.peer?.username || 'IGNAGHT'}`;
     try {
       // eslint-disable-next-line no-new
-      new Notification(`@${conv.peer?.username || 'IGNAGHT'}`, {
+      new Notification(title, {
         body,
         icon: 'icons/icon-192.png',
         badge: 'icons/icon-192.png',
@@ -4918,7 +5845,6 @@ window.IGNAGHT_SINGLE_FILE = true;
       if (state.user) state.user.plan = result.plan;
       toast(`¡Plan ${result.plan.name} activado! Válido hasta ${new Date(result.plan.expiresAt).toLocaleDateString('es-ES')}.`, 'ok', 6000);
       fx?.burst(0.5, 0.35);
-      buzz([14, 50, 14]);
       await loadPlans();
       renderPlans();
       renderShell();
@@ -4937,9 +5863,132 @@ window.IGNAGHT_SINGLE_FILE = true;
   }
 
   async function openSettingsView() {
+    try {
+      const data = await state.api.bots();
+      state.bots = data.bots || [];
+    } catch {
+      state.bots = [];
+    }
     showView('settings');
     setActiveRail('open-settings');
     await renderSettings();
+  }
+
+  function openBotCreateModal() {
+    const limit = state.user?.limits?.maxBots ?? 0;
+    if (limit <= 0) {
+      toast('Los bots públicos se desbloquean con Plus o superior.', 'bad');
+      return;
+    }
+    const modal = openModal({
+      title: 'Crear bot público',
+      subtitle: 'Recibirá un token para enviar avisos por API. No puede leer tus mensajes.',
+      body: `
+      <form id="bot-form" novalidate>
+        <label class="field">
+          <span class="field-label">Nombre del bot</span>
+          <span class="field-wrap">
+            <span class="field-ico">${svgIcon('bot')}</span>
+            <input id="bot-name" maxlength="24" placeholder="Mi bot de pedidos" autocomplete="off">
+          </span>
+        </label>
+        <p class="modal-note">${svgIcon('info', 'ico-xs')} Se creará una cuenta @nombre.bot que solo envía texto plano. Ideal para pedidos, alertas o estados.</p>
+        <p class="form-error" id="bot-error" hidden></p>
+        <button class="btn primary wide" type="submit" id="bot-submit">${svgIcon('spark', 'ico-xs')} Crear bot</button>
+      </form>`,
+    });
+    const form = $('#bot-form', modal.root);
+    const input = $('#bot-name', modal.root);
+    const errorEl = $('#bot-error', modal.root);
+    const submit = $('#bot-submit', modal.root);
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = input.value.trim();
+      if (name.length < 2) {
+        errorEl.textContent = 'Ponle un nombre de al menos 2 caracteres.';
+        errorEl.hidden = false;
+        return;
+      }
+      submit.disabled = true;
+      try {
+        const result = await state.api.createBot(name);
+        state.bots = [result.bot, ...state.bots];
+        modal.close();
+        await renderSettings();
+        openBotTokenModal(result.bot, result.token);
+      } catch (err) {
+        errorEl.textContent = err.message || 'No se pudo crear el bot.';
+        errorEl.hidden = false;
+      } finally {
+        submit.disabled = false;
+      }
+    });
+    setTimeout(() => input.focus(), 120);
+  }
+
+  function openBotTokenModal(bot, token) {
+    const modal = openModal({
+      title: `Bot @${bot.username}`,
+      subtitle: 'Guarda el token ahora: no se vuelve a mostrar.',
+      body: `
+      <p class="muted small">Envía avisos así:</p>
+      <pre class="bot-code">curl -X POST ${escapeHtml(state.api.base)}/api/bot/messages \\
+  -H "Authorization: Bearer ${escapeHtml(token)}" \\
+  -H "Content-Type: application/json" \\
+  -d '{"to":"usuario","text":"Tu pedido está listo"}'</pre>
+      <div class="token-box"><code id="bot-token-value">${escapeHtml(token)}</code></div>
+      <p class="modal-note">${svgIcon('shield', 'ico-xs')} El bot no puede leer mensajes cifrados ni unirse a grupos.</p>`,
+      footer: `<button class="btn primary" id="bot-copy">${svgIcon('check', 'ico-xs')} Copiar token</button>`,
+    });
+    modal.footer.querySelector('#bot-copy').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(token);
+        toast('Token copiado al portapapeles.', 'ok');
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents($('#bot-token-value', modal.root));
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        toast('Selecciona y copia el token.', 'info');
+      }
+    });
+  }
+
+  async function revokeBot(botId) {
+    const bot = state.bots.find((item) => item.id === botId);
+    const ok = await confirmDialog({
+      title: '¿Revocar este bot?',
+      text: `@${bot?.username || 'bot'} dejará de poder enviar avisos al instante. El historial se conserva.`,
+      confirmLabel: 'Revocar',
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      const result = await state.api.deleteBot(botId);
+      state.bots = state.bots.map((item) => (item.id === botId ? result.bot : item));
+      await renderSettings();
+      toast('Bot revocado.', 'ok');
+    } catch (err) {
+      toast(err.message || 'No se pudo revocar el bot.', 'bad');
+    }
+  }
+
+  function openBotApiModal() {
+    openModal({
+      title: 'API pública de bots',
+      subtitle: 'Tres endpoints, sin SDK y sin dependencias.',
+      body: `
+      <div class="api-docs">
+        <p><code>GET /api/bot</code> · documentación en JSON, sin token.</p>
+        <p><code>GET /api/bot/me</code> · comprobar el bot y los avisos enviados.</p>
+        <p><code>POST /api/bot/messages</code> · enviar un aviso a un usuario.</p>
+      </div>
+      <p class="muted small">Cuerpo del envío:</p>
+      <pre class="bot-code">{"to": "maria", "text": "Tu pedido ya está listo"}</pre>
+      <p class="modal-note">${svgIcon('info', 'ico-xs')} También acepta <code>conversationId</code>. El token se pasa como <code>Authorization: Bearer IGB-...</code> y solo se ve al crear el bot.</p>`,
+    });
   }
 
   function openServerModal(required = false) {
@@ -5242,13 +6291,469 @@ window.IGNAGHT_SINGLE_FILE = true;
   }
 
   // ---------------------------------------------------------------------------
+  // Grupos, edición, borrado y fijados
+  // ---------------------------------------------------------------------------
+
+  async function createGroupConversation(name, members) {
+    const convId = newConvId();
+    const { raw, key: groupKey } = await generateGroupKey();
+    const everyone = [{ id: state.user.id, publicKey: state.user.publicKey }, ...members];
+    const keys = {};
+    for (const member of everyone) {
+      keys[member.id] = {
+        ...(await wrapGroupKey(raw, state.privateKey, member.publicKey, convId)),
+        by: state.user.id,
+      };
+    }
+    const nameCipher = await encryptJson(groupKey, { name });
+    const result = await state.api.createGroup({
+      id: convId,
+      nameCipher,
+      memberIds: members.map((member) => member.id),
+      keys,
+    });
+    const conv = result.conversation;
+    conv.name = name;
+    state.keys.set(conv.id, groupKey);
+    state.groupRaw.set(conv.id, raw);
+    state.convs.unshift(conv);
+    state.convsById.set(conv.id, conv);
+    for (const member of members) state.peers.set(member.id, member);
+    renderConversations();
+    await openConversation(conv.id);
+    toast(`Grupo “${name}” creado con ${everyone.length} personas.`, 'ok', 6000);
+    fx?.burst(0.5, 0.35);
+  }
+
+  async function openMessageMenu(messageId) {
+    const conv = getConv(state.activeId);
+    if (!conv) return;
+    const message = (state.messages.get(conv.id) || []).find((m) => m.id === messageId);
+    if (!message) return;
+    const plain = message.deletedAt ? null : await decryptMessage(conv, message).catch(() => null);
+    const pinned = (conv.pinnedIds || []).includes(message.id);
+    const canEdit = canEditMessage(conv, message);
+    const canPin = canPinMessage(conv, message);
+    const canDelete = canDeleteMessage(conv, message);
+
+    const modal = openModal({
+      title: 'Mensaje',
+      subtitle: `${senderName(conv, message.senderId)} · ${new Date(message.createdAt).toLocaleString('es-ES')}`,
+      className: 'modal-small',
+      body: `
+      <p class="msg-menu-preview"></p>
+      <div class="msg-menu-actions">
+        ${plain?.text ? `<button class="btn ghost" data-menu="copy">${svgIcon('copy', 'ico-xs')} Copiar texto</button>` : ''}
+        ${canEdit ? `<button class="btn ghost" data-menu="edit">${svgIcon('edit', 'ico-xs')} Editar mensaje</button>` : ''}
+        ${canPin ? `<button class="btn ghost" data-menu="${pinned ? 'unpin' : 'pin'}">${svgIcon('pin', 'ico-xs')} ${pinned ? 'Quitar de fijados' : 'Fijar mensaje'}</button>` : ''}
+        ${canDelete ? `<button class="btn ghost danger-text" data-menu="delete">${svgIcon('trash', 'ico-xs')} Borrar para todos</button>` : ''}
+        ${!plain?.text && !canEdit && !canPin && !canDelete ? '<p class="muted small">No hay acciones disponibles.</p>' : ''}
+      </div>`,
+    });
+
+    const preview = modal.body.querySelector('.msg-menu-preview');
+    if (plain?.text) preview.textContent = plain.text.slice(0, 240);
+    else preview.textContent = message.deletedAt ? 'Mensaje eliminado' : '';
+    if (!preview.textContent) preview.remove();
+
+    modal.body.querySelector('[data-menu="copy"]')?.addEventListener('click', async () => {
+      await copyText(plain.text);
+      modal.close();
+      toast('Texto copiado.', 'ok');
+    });
+    modal.body.querySelector('[data-menu="edit"]')?.addEventListener('click', () => {
+      modal.close();
+      openEditMessageModal(conv, message, plain);
+    });
+    modal.body.querySelector('[data-menu="pin"]')?.addEventListener('click', async () => {
+      modal.close();
+      try {
+        const result = await state.api.pinMessage(conv.id, message.id);
+        Object.assign(conv, result.conversation);
+        renderPinned(conv);
+        if (state.infoOpen) renderInfo();
+        toast('Mensaje fijado.', 'ok');
+      } catch (err) {
+        toast(err.message || 'No se pudo fijar el mensaje.', 'bad');
+      }
+    });
+    modal.body.querySelector('[data-menu="unpin"]')?.addEventListener('click', () => {
+      modal.close();
+      unpinMessage(message.id);
+    });
+    modal.body.querySelector('[data-menu="delete"]')?.addEventListener('click', () => {
+      modal.close();
+      deleteMessageForAll(conv, message);
+    });
+  }
+
+  function openEditMessageModal(conv, message, plain) {
+    const modal = openModal({
+      title: 'Editar mensaje',
+      subtitle: 'Se vuelve a cifrar en tu dispositivo antes de enviarlo.',
+      body: `
+      <form id="edit-msg-form" novalidate>
+        <label class="field">
+          <span class="field-label">Texto</span>
+          <textarea id="edit-msg-text" class="edit-textarea" rows="4" maxlength="4000"></textarea>
+        </label>
+        <p class="form-error" id="edit-msg-error" hidden></p>
+        <button class="btn primary wide" type="submit" id="edit-msg-submit">${svgIcon('check', 'ico-xs')} Guardar cambios</button>
+      </form>`,
+    });
+    const form = $('#edit-msg-form', modal.root);
+    const textarea = $('#edit-msg-text', modal.root);
+    const errorEl = $('#edit-msg-error', modal.root);
+    const submit = $('#edit-msg-submit', modal.root);
+    textarea.value = plain?.text || '';
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    }, 120);
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorEl.hidden = true;
+      const text = textarea.value.trim();
+      if (!text) {
+        errorEl.textContent = 'El mensaje no puede quedar vacío.';
+        errorEl.hidden = false;
+        return;
+      }
+      if (text === plain?.text) {
+        modal.close();
+        return;
+      }
+      submit.disabled = true;
+      try {
+        const key = await ensureConvKey(conv);
+        const cipher = await encryptJson(key, { ...(plain || {}), text });
+        const result = await state.api.editMessage(conv.id, message.id, cipher);
+        message.cipher = result.message.cipher;
+        message.editedAt = result.message.editedAt;
+        message.editCount = result.message.editCount;
+        message._plain = { ...(plain || {}), text };
+        if (conv.lastMessage?.id === message.id) {
+          conv.lastMessage.cipher = message.cipher;
+          conv.lastMessage.editedAt = message.editedAt;
+        }
+        modal.close();
+        renderChat();
+        renderConversations();
+        toast('Mensaje editado.', 'ok');
+      } catch (err) {
+        errorEl.textContent = err.message || 'No se pudo editar el mensaje.';
+        errorEl.hidden = false;
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
+
+  async function deleteMessageForAll(conv, message) {
+    const ok = await confirmDialog({
+      title: '¿Borrar el mensaje?',
+      text: 'Se borrará para todos los miembros. No se puede deshacer.',
+      confirmLabel: 'Borrar para todos',
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      await state.api.deleteMessage(conv.id, message.id);
+      message.cipher = '';
+      message.deletedAt = Date.now();
+      delete message._plain;
+      conv.pinnedIds = (conv.pinnedIds || []).filter((id) => id !== message.id);
+      conv.pinnedMessages = (conv.pinnedMessages || []).filter((m) => m.id !== message.id);
+      if (conv.lastMessage?.id === message.id) {
+        conv.lastMessage.deleted = true;
+        conv.lastMessage.cipher = '';
+      }
+      renderChat();
+      renderConversations();
+      if (state.infoOpen) renderInfo();
+      toast('Mensaje borrado para todos.', 'ok');
+    } catch (err) {
+      toast(err.message || 'No se pudo borrar el mensaje.', 'bad');
+    }
+  }
+
+  async function unpinMessage(messageId) {
+    const conv = getConv(state.activeId);
+    if (!conv) return;
+    try {
+      const result = await state.api.unpinMessage(conv.id, messageId);
+      Object.assign(conv, result.conversation);
+      renderPinned(conv);
+      if (state.infoOpen) renderInfo();
+      toast('Mensaje desfijado.', 'ok');
+    } catch (err) {
+      toast(err.message || 'No se pudo desfijar.', 'bad');
+    }
+  }
+
+  function openAddMemberModal() {
+    const conv = getConv(state.activeId);
+    if (!conv || conv.type !== 'group') return;
+    const modal = openModal({
+      title: 'Añadir al grupo',
+      subtitle: 'Se le entregará la clave del grupo cifrada para su clave pública.',
+      body: `
+      <form id="add-member-form" novalidate>
+        <label class="field">
+          <span class="field-label">Usuario exacto</span>
+          <span class="field-wrap">
+            <span class="field-ico">${svgIcon('users')}</span>
+            <input id="add-member-username" placeholder="@usuario" maxlength="20" autocomplete="off" spellcheck="false">
+          </span>
+        </label>
+        <p class="form-error" id="add-member-error" hidden></p>
+        <button class="btn primary wide" type="submit" id="add-member-submit">${svgIcon('plus', 'ico-xs')} Añadir al grupo</button>
+      </form>`,
+    });
+    const form = $('#add-member-form', modal.root);
+    const input = $('#add-member-username', modal.root);
+    const errorEl = $('#add-member-error', modal.root);
+    const submit = $('#add-member-submit', modal.root);
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorEl.hidden = true;
+      const username = input.value.trim().replace(/^@+/, '');
+      if (!username) {
+        errorEl.textContent = 'Escribe un usuario.';
+        errorEl.hidden = false;
+        return;
+      }
+      submit.disabled = true;
+      try {
+        const found = await state.api.user(username);
+        if (!found?.user) throw new Error('No existe ningún usuario con ese nombre.');
+        if ((conv.members || []).some((member) => member.id === found.user.id)) {
+          throw new Error('Esa persona ya está en el grupo.');
+        }
+        await ensureConvKey(conv);
+        const raw = state.groupRaw.get(conv.id);
+        if (!raw) throw new Error('No se pudo abrir la clave del grupo.');
+        const envelope = await wrapGroupKey(raw, state.privateKey, found.user.publicKey, conv.id);
+        const result = await state.api.addMember(conv.id, found.user.id, envelope);
+        Object.assign(conv, result.conversation);
+        delete conv.name;
+        delete conv._namePromise;
+        await ensureConvName(conv);
+        modal.close();
+        renderChat();
+        renderInfo();
+        toast(`@${found.user.username} añadido al grupo.`, 'ok');
+      } catch (err) {
+        errorEl.textContent = err.message || 'No se pudo añadir al grupo.';
+        errorEl.hidden = false;
+      } finally {
+        submit.disabled = false;
+      }
+    });
+    setTimeout(() => input.focus(), 120);
+  }
+
+  async function removeGroupMember(userId) {
+    const conv = getConv(state.activeId);
+    if (!conv || conv.type !== 'group') return;
+    const member = memberById(conv, userId);
+    const ok = await confirmDialog({
+      title: `¿Quitar a @${member?.username || 'esta persona'}?`,
+      text: 'Dejará de recibir mensajes nuevos. Los que ya tenía no se pueden borrar de su dispositivo.',
+      confirmLabel: 'Quitar del grupo',
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      await state.api.removeMember(conv.id, userId);
+      await refreshConversations();
+      renderInfo();
+      toast('Miembro quitado del grupo.', 'ok');
+    } catch (err) {
+      toast(err.message || 'No se pudo quitar al miembro.', 'bad');
+    }
+  }
+
+  function openRenameGroupModal() {
+    const conv = getConv(state.activeId);
+    if (!conv || conv.type !== 'group') return;
+    const modal = openModal({
+      title: 'Nombre del grupo',
+      subtitle: 'El nombre también va cifrado con la clave del grupo.',
+      body: `
+      <form id="rename-group-form" novalidate>
+        <label class="field">
+          <span class="field-label">Nuevo nombre</span>
+          <span class="field-wrap">
+            <span class="field-ico">${svgIcon('users')}</span>
+            <input id="rename-group-name" maxlength="60" autocomplete="off">
+          </span>
+        </label>
+        <p class="form-error" id="rename-group-error" hidden></p>
+        <button class="btn primary wide" type="submit" id="rename-group-submit">${svgIcon('check', 'ico-xs')} Guardar nombre</button>
+      </form>`,
+    });
+    const form = $('#rename-group-form', modal.root);
+    const input = $('#rename-group-name', modal.root);
+    const errorEl = $('#rename-group-error', modal.root);
+    const submit = $('#rename-group-submit', modal.root);
+    input.value = convTitle(conv);
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = input.value.trim();
+      if (name.length < 2) {
+        errorEl.textContent = 'El nombre necesita al menos 2 caracteres.';
+        errorEl.hidden = false;
+        return;
+      }
+      submit.disabled = true;
+      try {
+        const key = await ensureConvKey(conv);
+        const nameCipher = await encryptJson(key, { name });
+        const result = await state.api.renameConversation(conv.id, nameCipher);
+        conv.nameCipher = nameCipher;
+        conv.name = name;
+        delete conv._namePromise;
+        Object.assign(conv, { ...result.conversation, name });
+        modal.close();
+        renderConversations();
+        renderChat();
+        renderInfo();
+        toast('Grupo renombrado.', 'ok');
+      } catch (err) {
+        errorEl.textContent = err.message || 'No se pudo renombrar el grupo.';
+        errorEl.hidden = false;
+      } finally {
+        submit.disabled = false;
+      }
+    });
+    setTimeout(() => input.focus(), 120);
+  }
+
+  async function leaveGroup() {
+    const conv = getConv(state.activeId);
+    if (!conv || conv.type !== 'group') return;
+    const ok = await confirmDialog({
+      title: '¿Salir del grupo?',
+      text: 'Dejarás de recibir mensajes nuevos. Necesitarás que te vuelvan a añadir.',
+      confirmLabel: 'Salir',
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      await state.api.leaveConversation(conv.id);
+      removeConversationLocal(conv.id);
+      toast('Has salido del grupo.', 'info');
+    } catch (err) {
+      toast(err.message || 'No se pudo salir del grupo.', 'bad');
+    }
+  }
+
+  async function deleteGroup() {
+    const conv = getConv(state.activeId);
+    if (!conv || conv.type !== 'group') return;
+    const ok = await confirmDialog({
+      title: `¿Borrar “${convTitle(conv)}”?`,
+      text: 'Se borrarán el grupo, sus mensajes y los archivos cifrados para todos. No se puede deshacer.',
+      confirmLabel: 'Borrar grupo',
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      await state.api.deleteConversation(conv.id);
+      removeConversationLocal(conv.id);
+      toast('Grupo borrado.', 'info');
+    } catch (err) {
+      toast(err.message || 'No se pudo borrar el grupo.', 'bad');
+    }
+  }
+
+  function removeConversationLocal(conversationId) {
+    state.convs = state.convs.filter((conv) => conv.id !== conversationId);
+    state.convsById.delete(conversationId);
+    state.messages.delete(conversationId);
+    state.keys.delete(conversationId);
+    state.groupRaw.delete(conversationId);
+    messagesLoaded.delete(conversationId);
+    if (state.activeId === conversationId) {
+      state.activeId = null;
+      state.infoOpen = false;
+      applyLayout();
+      renderChat();
+      renderInfo();
+    }
+    renderConversations();
+  }
+
+  async function exportConversation(conversationId) {
+    const conv = getConv(conversationId);
+    if (!conv) return;
+    if (!state.user?.limits?.exportChat) {
+      toast('Exportar conversaciones está disponible desde el plan Plus.', 'warn');
+      return;
+    }
+    toast('Preparando la exportación cifrada…', 'info');
+    try {
+      const all = [];
+      const seen = new Set();
+      let before = null;
+      for (let page = 0; page < 60; page += 1) {
+        const data = await state.api.messages(conv.id, { limit: 200, before });
+        const batch = data.messages || [];
+        for (const message of batch) {
+          if (seen.has(message.id)) continue;
+          seen.add(message.id);
+          all.push(message);
+        }
+        if (!data.hasMore || !batch.length) break;
+        before = batch[0].id;
+      }
+      all.sort((a, b) => a.createdAt - b.createdAt);
+
+      const lines = [
+        `IGNAGHT · ${convTitle(conv)}`,
+        `Exportado: ${new Date().toLocaleString('es-ES')}`,
+        '',
+      ];
+      for (const message of all) {
+        const who = message.senderId === state.user.id ? 'Tú' : senderName(conv, message.senderId);
+        const when = new Date(message.createdAt).toLocaleString('es-ES');
+        let text;
+        if (message.deletedAt) {
+          text = '[mensaje eliminado]';
+        } else {
+          const plain = await decryptMessage(conv, message).catch(() => null);
+          text = previewFor(plain, message);
+        }
+        lines.push(`[${when}] ${who}: ${text}`);
+      }
+
+      const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const safeName = convTitle(conv).replace(/[^\w.-]+/g, '-').slice(0, 40) || 'conversacion';
+      link.href = url;
+      link.download = `ignaght-${safeName}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      toast('Conversación exportada.', 'ok');
+    } catch (err) {
+      toast(err.message || 'No se pudo exportar la conversación.', 'bad');
+    }
+  }
+
+  // ---------------------------------------------------------------------------
   // Eventos globales
   // ---------------------------------------------------------------------------
 
   function wireGlobalEvents() {
     document.addEventListener('click', (event) => {
       fx?.ripple(event);
-      if (event.target.closest('.btn,.icon-btn,.rail-btn,.mobile-nav button,.conv,.send-btn,.segmented button,.switch,.fab')) buzz(6);
       const target = event.target.closest('[data-action]');
       if (!target) return;
       const action = target.dataset.action;
@@ -5288,18 +6793,23 @@ window.IGNAGHT_SINGLE_FILE = true;
           setActiveRail('rail-chats');
           break;
         case 'new-chat':
-          openNewChatModal(async (username) => {
-            const found = await state.api.user(username);
-            if (!found?.user) throw new Error('No existe ningún usuario con ese nombre.');
-            const result = await state.api.createConversation(found.user.id);
-            const conv = result.conversation;
-            if (!getConv(conv.id)) {
-              state.convs.unshift(conv);
-              state.convsById.set(conv.id, conv);
-              state.peers.set(conv.peer.id, conv.peer);
-            }
-            await openConversation(conv.id);
-            toast(`Conversación con @${conv.peer.username} abierta.`, 'ok');
+          openNewChatModal({
+            limits: state.user?.limits,
+            lookupUser: (username) => state.api.user(username),
+            onCreateDirect: async (username) => {
+              const found = await state.api.user(username);
+              if (!found?.user) throw new Error('No existe ningún usuario con ese nombre.');
+              const result = await state.api.createConversation(found.user.id);
+              const conv = result.conversation;
+              if (!getConv(conv.id)) {
+                state.convs.unshift(conv);
+                state.convsById.set(conv.id, conv);
+                state.peers.set(conv.peer.id, conv.peer);
+              }
+              await openConversation(conv.id);
+              toast(`Conversación con @${conv.peer.username} abierta.`, 'ok');
+            },
+            onCreateGroup: (name, members) => createGroupConversation(name, members),
           });
           break;
         case 'open-conv':
@@ -5366,6 +6876,48 @@ window.IGNAGHT_SINGLE_FILE = true;
           })();
           break;
         }
+        case 'msg-menu':
+          openMessageMenu(target.dataset.id);
+          break;
+        case 'jump-msg': {
+          const node = document.querySelector(`.msg[data-id="${target.dataset.id}"]`);
+          if (node) {
+            node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            node.classList.add('flash');
+            setTimeout(() => node.classList.remove('flash'), 1200);
+          }
+          break;
+        }
+        case 'unpin-message':
+          unpinMessage(target.dataset.id);
+          break;
+        case 'group-add-member':
+          openAddMemberModal();
+          break;
+        case 'group-remove-member':
+          removeGroupMember(target.dataset.id);
+          break;
+        case 'group-rename':
+          openRenameGroupModal();
+          break;
+        case 'group-leave':
+          leaveGroup();
+          break;
+        case 'group-delete':
+          deleteGroup();
+          break;
+        case 'bot-create':
+          openBotCreateModal();
+          break;
+        case 'bot-revoke':
+          revokeBot(target.dataset.id);
+          break;
+        case 'bot-api':
+          openBotApiModal();
+          break;
+        case 'export-chat':
+          exportConversation(target.dataset.id || state.activeId);
+          break;
         case 'open-media':
           openLightbox({
             src: target.dataset.src,
@@ -5391,32 +6943,6 @@ window.IGNAGHT_SINGLE_FILE = true;
           break;
         case 'toggle-notify':
           toggleNotifications();
-          break;
-        case 'paste-code':
-          navigator.clipboard?.readText().then((text) => {
-            const input = $('#redeem-code');
-            if (!input) return;
-            input.value = text;
-            formatCodeInput(input);
-            input.focus();
-          }).catch(() => toast('No se pudo leer el portapapeles. Pega el código a mano.', 'warn'));
-          break;
-        case 'camera':
-          if (!state.activeId) { toast('Elige una conversación antes de hacer una foto.', 'warn'); break; }
-          $('#cam-input')?.click();
-          break;
-        case 'scroll-bottom':
-          $('#messages')?.scrollTo({ top: 1e9, behavior: 'smooth' });
-          break;
-        case 'toggle-haptics':
-          savePrefs({ haptics: state.prefs.haptics === false });
-          renderSettings();
-          break;
-        case 'install-app':
-          if (deferredInstall) {
-            deferredInstall.prompt();
-            deferredInstall.userChoice.finally(() => { deferredInstall = null; renderSettings(); });
-          }
           break;
         case 'change-password':
           openPasswordModal();
@@ -5473,21 +6999,6 @@ window.IGNAGHT_SINGLE_FILE = true;
       if (file) sendFile(file);
     });
 
-    $('#cam-input')?.addEventListener('change', (event) => {
-      const file = event.target.files?.[0];
-      event.target.value = '';
-      if (file) sendFile(file);
-    });
-    $('#messages')?.addEventListener('scroll', () => {
-      const h = $('#messages');
-      $('#scroll-fab')?.classList.toggle('hidden', h.scrollHeight - h.scrollTop - h.clientHeight < 320);
-    }, { passive: true });
-    window.addEventListener('beforeinstallprompt', (event) => {
-      event.preventDefault();
-      deferredInstall = event;
-      if (!$('#view-settings').classList.contains('hidden')) renderSettings();
-    });
-    window.addEventListener('appinstalled', () => { deferredInstall = null; });
     $('#chat-pane')?.addEventListener('dragover', (event) => {
       event.preventDefault();
       $('#chat-pane').classList.add('dropping');
@@ -5535,17 +7046,13 @@ window.IGNAGHT_SINGLE_FILE = true;
 
     window.addEventListener('resize', () => applyLayout());
     window.addEventListener('online', () => {
-      document.body.classList.remove('is-offline');
       setConnection('En línea', 'ok');
       if (state.user) {
         connectSse();
         refreshConversations();
       }
     });
-    window.addEventListener('offline', () => {
-      document.body.classList.add('is-offline');
-      setConnection('Sin conexión', 'bad');
-    });
+    window.addEventListener('offline', () => setConnection('Sin conexión', 'bad'));
 
     window.addEventListener('ignaght:lightbox', (event) => openLightbox(event.detail));
     window.addEventListener('pagehide', () => {
@@ -5602,8 +7109,6 @@ window.IGNAGHT_SINGLE_FILE = true;
       delete msg._plain;
       delete msg._error;
     }
-    const mh = $('#messages');
-    if (mh) mh.dataset.count = '';
     renderChat();
   }
 
@@ -5793,6 +7298,7 @@ window.IGNAGHT_SINGLE_FILE = true;
       <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.5 9.5h17M3.5 14.5h17"/><path d="M12 3c2.5 2.4 4 5.6 4 9s-1.5 6.6-4 9c-2.5-2.4-4-5.6-4-9s1.5-6.6 4-9Z"/></symbol>
       <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 4v7h-7"/></symbol>
       <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16.5 5.3a3 3 0 0 1 0 5.7M18 14.6c2 .6 3.5 2.3 3.5 4.6"/></symbol>
+<symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="3.5"/><path d="M12 4v4M8.5 13.5h.01M15.5 13.5h.01M9 17h6"/></symbol>
       <symbol id="i-chevrondown" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
       <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4 11 13"/><path d="M19 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/></symbol>
       <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M8.5 16.5a5 5 0 0 1 6 0M5 13a10 10 0 0 1 3.4-2.2M2 9.5a15 15 0 0 1 4.4-2.7M14.5 9.7a15 15 0 0 1 3.3 1.5M17 6.5a20 20 0 0 1 5 3M12 20h.1"/></symbol>
@@ -5800,6 +7306,9 @@ window.IGNAGHT_SINGLE_FILE = true;
       <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="3"/></symbol>
       <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
       <symbol id="i-checks" viewBox="0 0 24 24"><path d="m2 12.5 4 4L16 6.5"/><path d="m10 16.5 2 2L22 8.5"/></symbol>
+      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16v4Z"/><path d="m14 6 4 4"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9 3h6l-1 6 4 4v2H6v-2l4-4-1-6Z"/><path d="M12 15v6"/></symbol>
     </defs>
   </svg>
 
@@ -5997,7 +7506,6 @@ window.IGNAGHT_SINGLE_FILE = true;
         <p>Busca a alguien por su nombre de usuario y empieza a hablar en privado.</p>
         <button class="btn ghost small" data-action="new-chat">Nueva conversación</button>
       </div>
-      <button type="button" class="fab only-mobile" data-action="new-chat" aria-label="Nueva conversación"><span data-i="plus"></span></button>
       <div class="list-foot">
         <span class="dot ok"></span>
         <span id="net-label">En línea</span>
@@ -6022,6 +7530,8 @@ window.IGNAGHT_SINGLE_FILE = true;
         </div>
       </header>
 
+      <div class="pinned-bar" id="pinned-bar" hidden></div>
+
       <div class="messages" id="messages" role="log" aria-live="polite"></div>
 
       <div class="chat-empty" id="chat-empty">
@@ -6040,16 +7550,13 @@ window.IGNAGHT_SINGLE_FILE = true;
         <span id="typing-name">alguien</span> está escribiendo…
       </div>
 
-      <button type="button" class="scroll-fab hidden" id="scroll-fab" data-action="scroll-bottom" aria-label="Ir al final"><span data-i="chevrondown"></span></button>
       <form class="composer" id="composer" autocomplete="off">
         <input type="file" id="file-input" accept="image/*,video/*,audio/*" hidden>
-        <input type="file" id="cam-input" accept="image/*" capture="environment" hidden>
         <button type="button" class="icon-btn" data-action="pick-media" aria-label="Adjuntar foto o vídeo" title="Adjuntar"><span data-i="clip"></span></button>
         <div class="composer-field">
           <textarea id="composer-input" rows="1" maxlength="4000" placeholder="Escribe un mensaje cifrado…"></textarea>
           <button type="button" class="emoji-btn" data-action="emoji" aria-label="Emojis">😊</button>
         </div>
-        <button type="button" class="icon-btn only-mobile" data-action="camera" aria-label="Hacer una foto"><span data-i="image"></span></button>
         <button type="button" class="icon-btn mic-btn" data-action="record-audio" aria-label="Grabar una nota de voz" title="Grabar audio"><span data-i="mic"></span></button>
         <button class="send-btn" type="submit" aria-label="Enviar mensaje" title="Enviar"><span data-i="send"></span></button>
         <div class="record-bar" id="record-bar" hidden>
@@ -6086,7 +7593,7 @@ window.IGNAGHT_SINGLE_FILE = true;
   <section id="view-plans" class="view hidden" data-view="plans" aria-label="Planes">
     <header class="view-head">
       <button class="icon-btn" data-action="close-view" aria-label="Volver"><span data-i="arrow-left"></span></button>
-      <div><h2>Planes</h2><p class="muted">Canjea un código y mira los niveles</p></div>
+      <div><h2>Planes y códigos IGNAGHT</h2><p class="muted">Llaves de acceso que el servidor fabrica cada 24 horas</p></div>
       <span class="view-head-ico" data-i="crown"></span>
     </header>
     <div class="view-body" id="plans-body"></div>
@@ -6104,7 +7611,6 @@ window.IGNAGHT_SINGLE_FILE = true;
 
   <div id="modal-root"></div>
   <div id="toasts" class="toasts" aria-live="polite"></div>
-  <div class="offline-bar" id="offline-bar" role="status">Sin conexión · reconectando…</div>
 
   <noscript>
     <div class="noscript">IGNAGHT necesita JavaScript para cifrar en tu navegador. Actívalo y recarga.</div>
