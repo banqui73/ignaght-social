@@ -2113,6 +2113,10 @@ html[data-theme="mono"] { --a1: #d4d4e2; --a2: #8b90ad; }
 
 
 .home-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:99px;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#081018;background:linear-gradient(135deg,var(--ok),var(--a2));vertical-align:middle}
+.conv-del{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:none;place-items:center;border-radius:9px;background:rgba(10,10,20,.94);border:1px solid var(--line);color:var(--muted);cursor:pointer;z-index:2}
+.conv:hover .conv-del{display:grid}
+.conv-del:hover{color:var(--bad);border-color:rgba(255,84,112,.5)}
+@media (hover:none){.conv-del{display:none!important}}
 /* --- Ajustes del build de un solo archivo --- */
 svg.brand-mark,
 svg.boot-shield,
@@ -3002,6 +3006,35 @@ window.IGNAGHT_SINGLE_FILE = true;
 
   const PLAN_NAMES = { free: 'Gratis', plus: 'Plus', pro: 'Pro', elite: 'Elite' };
 
+  // Chats eliminados "para mí": guardamos hasta qué mensaje se borró (hora del servidor).
+  const revealedConvs = new Set();
+  function hiddenKey() {
+    return `ignaght.hidden.v1.${state.user?.id || ''}`;
+  }
+  function getHidden() {
+    try {
+      return JSON.parse(localStorage.getItem(hiddenKey()) || '{}') || {};
+    } catch {
+      return {};
+    }
+  }
+  function setHidden(map) {
+    try {
+      localStorage.setItem(hiddenKey(), JSON.stringify(map));
+    } catch {
+      /* sin storage */
+    }
+  }
+  function hiddenAt(id) {
+    return Number(getHidden()[id] || 0);
+  }
+  function isConvHidden(conv) {
+    if (!conv || conv.type === 'group' || revealedConvs.has(conv.id)) return false;
+    const at = hiddenAt(conv.id);
+    if (!at) return false;
+    return (conv.lastMessage?.createdAt || 0) <= at;
+  }
+
   // Web de casa = acceso desde localhost, IP de red local o dominios que añadas aquí.
   const HOME_EXTRA_HOSTS = []; // p. ej. ['casa.midominio.com']
   function isHomeWeb() {
@@ -3619,6 +3652,7 @@ window.IGNAGHT_SINGLE_FILE = true;
 
     const filter = state.filter.trim().toLowerCase();
     const list = state.convs.filter((conv) => {
+      if (isConvHidden(conv)) return false;
       if (!filter) return true;
       return convTitle(conv).toLowerCase().includes(filter);
     });
@@ -3664,7 +3698,8 @@ window.IGNAGHT_SINGLE_FILE = true;
           <span class="conv-preview">${conv.lastMessage ? (conv.lastMessage.deleted ? 'Mensaje eliminado' : 'Mensaje cifrado') : 'Sin mensajes todavía'}</span>
           ${conv.unread ? `<span class="unread">${conv.unread > 99 ? '99+' : conv.unread}</span>` : ''}
         </span>
-      </span>`;
+      </span>
+      <span class="conv-del" data-action="delete-chat" data-id="${conv.id}" role="button" title="Eliminar chat" aria-label="Eliminar chat">${svgIcon('trash', 'ico-xs')}</span>`;
       const nameEl = node.querySelector('.conv-name');
       const badge = conv.type === 'group' ? '<span class="group-badge">grupo</span>' : planBadge(conv.peer?.plan?.tier);
       nameEl.innerHTML = `${escapeHtml(title)}${badge}`;
@@ -4214,6 +4249,7 @@ window.IGNAGHT_SINGLE_FILE = true;
             : `<button class="btn ghost small danger-text" data-action="group-leave" data-id="${conv.id}">${svgIcon('logout', 'ico-xs')} Salir del grupo</button>`
         }
         <button class="btn ghost small danger-text" data-action="clear-local" data-id="${conv.id}">${svgIcon('trash', 'ico-xs')} Borrar copia local</button>
+        ${conv.type === 'group' ? '' : `<button class="btn ghost small danger-text" data-action="delete-chat" data-id="${conv.id}">${svgIcon('trash', 'ico-xs')} Eliminar chat</button>`}
       </div>`;
       hydrateIcons(host);
       fillPinnedTexts(host, conv, pinned);
@@ -4257,6 +4293,7 @@ window.IGNAGHT_SINGLE_FILE = true;
       ${canExport ? `<button class="btn ghost small" data-action="export-chat" data-id="${conv.id}">${svgIcon('download', 'ico-xs')} Exportar</button>` : ''}
       <button class="btn ghost small" data-action="refresh-chat" data-id="${conv.id}">${svgIcon('refresh', 'ico-xs')} Recargar</button>
       <button class="btn ghost small danger-text" data-action="clear-local" data-id="${conv.id}">${svgIcon('trash', 'ico-xs')} Borrar copia local</button>
+        ${conv.type === 'group' ? '' : `<button class="btn ghost small danger-text" data-action="delete-chat" data-id="${conv.id}">${svgIcon('trash', 'ico-xs')} Eliminar chat</button>`}
     </div>`;
 
     hydrateIcons(host);
@@ -5499,8 +5536,9 @@ window.IGNAGHT_SINGLE_FILE = true;
     ]);
     connectSse();
     startTicker();
-    if (!isMobileLayout() && state.convs.length) {
-      await openConversation(state.convs[0].id);
+    const firstConv = state.convs.find((c) => !isConvHidden(c));
+    if (!isMobileLayout() && firstConv) {
+      await openConversation(firstConv.id);
     } else {
       renderChat();
     }
@@ -5756,7 +5794,10 @@ window.IGNAGHT_SINGLE_FILE = true;
     const loaded = data.messages || [];
     const cached = state.messages.get(conversationId) || [];
     const extra = cached.filter((msg) => !loaded.some((m) => m.id === msg.id));
-    const merged = [...loaded, ...extra].sort((a, b) => a.createdAt - b.createdAt);
+    const cutoff = hiddenAt(conversationId);
+    const merged = [...loaded, ...extra]
+      .filter((msg) => msg.createdAt > cutoff)
+      .sort((a, b) => a.createdAt - b.createdAt);
     state.messages.set(conversationId, merged);
     messagesLoaded.add(conversationId);
     if (data.conversation) {
@@ -6171,6 +6212,7 @@ window.IGNAGHT_SINGLE_FILE = true;
   }
 
   async function handleIncoming(conversationId, message) {
+    if (message && message.createdAt <= hiddenAt(conversationId)) return;
     if (!message) return;
     let conv = getConv(conversationId);
     if (!conv) {
@@ -7533,6 +7575,47 @@ window.IGNAGHT_SINGLE_FILE = true;
     renderConversations();
   }
 
+  async function deleteChat(id) {
+    const conv = getConv(id);
+    if (!conv) return;
+
+    if (conv.type === 'group') {
+      if (state.activeId !== id) await openConversation(id);
+      if (conv.ownerId === state.user?.id) await deleteGroup();
+      else await leaveGroup();
+      return;
+    }
+
+    const ok = await confirmDialog({
+      title: '¿Eliminar este chat?',
+      text: `Se quitará de tu lista y se borrarán sus mensajes de este dispositivo. @${conv.peer?.username || 'La otra persona'} conserva los suyos. Si te escribe otra vez, el chat vuelve solo con lo nuevo.`,
+      confirmLabel: 'Eliminar chat',
+      danger: true,
+    });
+    if (!ok) return;
+
+    let cutoff = Number(conv.lastMessage?.createdAt || 0);
+    for (const msg of state.messages.get(id) || []) cutoff = Math.max(cutoff, Number(msg.createdAt || 0));
+    const map = getHidden();
+    map[id] = Math.max(1, cutoff);
+    setHidden(map);
+    revealedConvs.delete(id);
+
+    state.messages.delete(id);
+    messagesLoaded.delete(id);
+    conv.unread = 0;
+    if (state.activeId === id) {
+      state.activeId = null;
+      state.infoOpen = false;
+      if (isMobileLayout()) setChatOpen(false);
+      applyLayout();
+      renderChat();
+      renderInfo();
+    }
+    renderConversations();
+    toast('Chat eliminado.', 'ok');
+  }
+
   async function exportConversation(conversationId) {
     const conv = getConv(conversationId);
     if (!conv) return;
@@ -7693,6 +7776,7 @@ window.IGNAGHT_SINGLE_FILE = true;
               if (!found?.user) throw new Error('No existe ningún usuario con ese nombre.');
               const result = await state.api.createConversation(found.user.id);
               const conv = result.conversation;
+              revealedConvs.add(conv.id);
               if (!getConv(conv.id)) {
                 state.convs.unshift(conv);
                 state.convsById.set(conv.id, conv);
@@ -7751,6 +7835,10 @@ window.IGNAGHT_SINGLE_FILE = true;
           openConversation(id, { alreadyOpen: true });
           break;
         }
+        case 'delete-chat':
+          event.stopPropagation();
+          deleteChat(target.dataset.id);
+          break;
         case 'clear-local': {
           const id = target.dataset.id;
           (async () => {
